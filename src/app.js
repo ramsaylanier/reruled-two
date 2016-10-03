@@ -1,9 +1,9 @@
 import React from 'react'
+import {graphql} from 'react-apollo'
+import gql from 'graphql-tag'
 
-export default class App extends React.Component {
-  render () {
-    return (
-      <h1>This is the app Component</h1>
-    )
-  }
+const App = (props) => {
+  return <h1>This is the APP component</h1>
 }
+
+export default App
