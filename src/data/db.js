@@ -28,12 +28,11 @@ GameDatabase.createGame = function (game) {
     body: {
       title: title
     }
-  }, (err, res) => {
-    if (err) {
-      console.log(err.message)
-    } else {
-      console.log('Game Added: ', title)
-    }
+  })
+}
+GameDatabase.findGames = function () {
+  return this.client.search({
+    index: 'games'
   })
 }
 
