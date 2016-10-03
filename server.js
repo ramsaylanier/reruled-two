@@ -4,11 +4,19 @@ import webpack from 'webpack'
 import webpackMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from './webpack.config'
+import bodyParser from 'body-parser'
 import {loadGamesFromTestData} from './utils/utils'
+import {apolloExpress, graphiqlExpress} from 'apollo-server'
+import graphQLSchema from './src/data/schema/schema'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
 const app = express()
+
+app.use('/graphql', bodyParser.json(), apolloExpress({schema: graphQLSchema}))
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql'
+}))
 
 if (isDev) {
   const compiler = webpack(config)
