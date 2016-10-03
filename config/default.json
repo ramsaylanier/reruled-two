@@ -1,0 +1,6 @@
+{
+  "elasticsearch": {
+    "host": "localhost:9200",
+    "index": "reruled"
+  }
+}
