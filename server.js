@@ -1,9 +1,10 @@
-const express = require('express')
-const path = require('path')
-const webpack = require('webpack')
-const webpackMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')
-const config = require('./webpack.config')
+import express from 'express'
+import path from 'path'
+import webpack from 'webpack'
+import webpackMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
+import config from './webpack.config'
+import {loadGamesFromTestData} from './utils/utils'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
@@ -19,8 +20,8 @@ if (isDev) {
       hash: true,
       timings: true,
       chunks: true,
-      chunkModules: true,
-      modules: true
+      chunkModules: false,
+      modules: false
     }
   })
 
@@ -39,6 +40,8 @@ if (isDev) {
 app.listen(port, '0.0.0.0', function onStart (err) {
   if (err) {
     console.log(err)
+  } else {
+    loadGamesFromTestData()
   }
   console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port)
 })
