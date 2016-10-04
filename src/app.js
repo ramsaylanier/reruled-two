@@ -1,9 +1,12 @@
 import React from 'react'
-import {graphql} from 'react-apollo'
-import gql from 'graphql-tag'
+import GameList from './components/games/gameList'
 
 const App = (props) => {
-  return <h1>This is the APP component</h1>
+  return (
+    <div>
+      <GameList/>
+    </div>
+  )
 }
 
 export default App
