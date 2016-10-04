@@ -1,11 +1,22 @@
 import React from 'react'
-import GameList from './components/games/gameList'
+import ApolloClient from 'apollo-client'
+import {ApolloProvider} from 'react-apollo'
+import {Router, Route, IndexRoute, browserHistory} from 'react-router'
+import Home from './components/home'
+import Login from './components/login'
+import Layout from './components/layout/default'
 
+const client = new ApolloClient()
 const App = (props) => {
   return (
-    <div>
-      <GameList/>
-    </div>
+    <ApolloProvider client={client}>
+      <Router history={browserHistory}>
+        <Route path="/" component={Layout}>
+          <IndexRoute component={Home}/>
+          <Route path="login" component={Login}/>
+        </Route>
+      </Router>
+    </ApolloProvider>
   )
 }
 

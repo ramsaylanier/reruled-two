@@ -1,14 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
-import ApolloClient from 'apollo-client'
-import {ApolloProvider} from 'react-apollo'
+import {AppContainer} from 'react-hot-loader'
+import App from './app'
 
-const client = new ApolloClient()
+const rootEl = document.getElementById('root')
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById('root')
+  <AppContainer>
+    <App/>
+  </AppContainer>,
+  rootEl
 )
+
+if (module.hot) {
+  console.log('hot')
+  module.hot.accept('./app', () => {
+    // If you use Webpack 2 in ES modules mode, you can
+    // use <App /> here rather than require() a <NextApp />.
+    const NextApp = require('./app').default
+    ReactDOM.render(
+      <AppContainer>
+        <NextApp />
+      </AppContainer>,
+      rootEl
+    )
+  })
+}
