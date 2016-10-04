@@ -37,13 +37,22 @@
     "apollo-client": "^0.4.20",
     "apollo-server": "^0.3.2",
     "body-parser": "^1.15.2",
+    "css-loader": "^0.25.0",
     "elasticsearch": "^11.0.1",
     "express": "^4.14.0",
     "graphql": "^0.7.1",
     "graphql-tag": "^0.1.14",
     "graphql-tools": "^0.7.2",
+    "node-sass": "^3.10.1",
+    "passport": "^0.3.2",
     "react": "^15.3.2",
     "react-apollo": "^0.5.7",
-    "react-dom": "^15.3.2"
+    "react-css-modules": "^3.7.10",
+    "react-dom": "^15.3.2",
+    "react-router": "^2.8.1",
+    "resolve-url": "^0.2.1",
+    "resolve-url-loader": "^1.6.0",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1"
   }
 }
