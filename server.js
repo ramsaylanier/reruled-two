@@ -5,9 +5,11 @@ import webpackMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from './webpack.config'
 import bodyParser from 'body-parser'
-import {loadGamesFromTestData} from './utils/utils'
+import {loadGamesFromTestData, loadUsersFromTestData} from './utils/utils'
 import {apolloExpress, graphiqlExpress} from 'apollo-server'
 import graphQLSchema from './src/data/schema/schema'
+import passport from './src/auth/config'
+import authRoutes from './src/auth/routes'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
@@ -17,6 +19,10 @@ app.use('/graphql', bodyParser.json(), apolloExpress({schema: graphQLSchema}))
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
+
+app.use(bodyParser.json())
+app.use(passport.initialize())
+app.use('/', authRoutes)
 
 if (isDev) {
   const compiler = webpack(config)
@@ -45,11 +51,13 @@ if (isDev) {
   })
 }
 
+
 app.listen(port, '0.0.0.0', function onStart (err) {
   if (err) {
     console.log(err)
   } else {
     loadGamesFromTestData()
+    loadUsersFromTestData()
   }
   console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port)
 })

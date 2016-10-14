@@ -1,6 +1,7 @@
 
 import _ from 'lodash'
-import {GameDatabase} from '../db'
+import GameDatabase from '../db/games'
+import UserDatabase from '../db/users'
 
 // get the source of each elasticsearch hit
 function getSource (results, fields) {

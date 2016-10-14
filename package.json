@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node --debug server.js"
+    "startdev": "NODE_ENV='development' babel-node --debug server.js",
+    "startprod": "NODE_ENV='production' babel-node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "eslint-plugin-react": "^6.3.0",
     "eslint-plugin-standard": "^2.0.1",
     "html-webpack-plugin": "^2.22.0",
+    "json-loader": "^0.5.4",
     "lodash": "^4.16.3",
     "react-hot-loader": "^3.0.0-beta.5",
     "webpack": "^1.13.2",
@@ -36,6 +38,8 @@
   "dependencies": {
     "apollo-client": "^0.4.20",
     "apollo-server": "^0.3.2",
+    "axios": "^0.14.0",
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "css-loader": "^0.25.0",
     "elasticsearch": "^11.0.1",
@@ -45,6 +49,7 @@
     "graphql-tools": "^0.7.2",
     "node-sass": "^3.10.1",
     "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "react": "^15.3.2",
     "react-apollo": "^0.5.7",
     "react-css-modules": "^3.7.10",

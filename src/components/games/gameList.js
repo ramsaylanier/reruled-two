@@ -1,13 +1,15 @@
 import React from 'react'
+import CSSModules from 'react-css-modules'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import styles from './gamelist.scss'
 
 const GameList = (props) => {
   const {games, loading} = props.data
 
   const _renderGames = function (games) {
     return games.map((game, index) => {
-      return <li key={index}>{game.title}</li>
+      return <li key={index} styleName="item">{game.title}</li>
     })
   }
 
@@ -30,5 +32,6 @@ const GameListQuery = gql`
   }
 `
 
-const GameListWithGames = graphql(GameListQuery)(GameList)
+const GameListWithStyles = CSSModules(GameList, styles)
+const GameListWithGames = graphql(GameListQuery)(GameListWithStyles)
 export default GameListWithGames

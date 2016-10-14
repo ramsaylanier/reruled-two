@@ -15,22 +15,22 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"development"'
+    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: 'body',
       filename: 'index.html'
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
   module: {
     loaders: [
       {
-        test: /\.js?$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel'
       }, {
@@ -40,13 +40,13 @@ module.exports = {
         test: /\.css$/,
         loaders: [
           'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
         ]
       }, {
         test: /\.scss$/,
         loaders: [
           'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
           'resolve-url',
           'sass?sourceMap'
         ]

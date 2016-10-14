@@ -2,3 +2,7 @@
   padding: .5rem;
   background-color: black;
 }
+
+.link{
+  composes: link from '../../styles/links.scss'
+}

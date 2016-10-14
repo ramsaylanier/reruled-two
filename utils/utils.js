@@ -1,7 +1,8 @@
 import cheerio from 'cheerio'
-import {createGame} from '../src/api/api'
+import {createGame, createUser} from '../src/api/api'
 import http from 'http'
 import testGames from '../src/data/test_games.json'
+import testUsers from '../src/data/test_users.json'
 
 export function loadGamesFromExternalSource () {
   console.log('loading games')
@@ -33,8 +34,13 @@ export function loadGamesFromExternalSource () {
 }
 
 export function loadGamesFromTestData () {
-  console.log(testGames)
   testGames.forEach((game, index) => {
     createGame(game)
+  })
+}
+
+export function loadUsersFromTestData () {
+  testUsers.forEach((user, index) => {
+    createUser(user)
   })
 }

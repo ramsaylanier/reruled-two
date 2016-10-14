@@ -7,8 +7,8 @@ const Header = (props) => {
   return (
     <header styleName="base">
       <ul>
-        <Link to="/">Home</Link>
-        <Link to="/login">Login</Link>
+        <Link to="/" styleName="link">Home</Link>
+        <Link to="/login" styleName="link">Login</Link>
       </ul>
     </header>
   )
