@@ -39,6 +39,7 @@
     "apollo-client": "^0.4.20",
     "apollo-server": "^0.3.2",
     "axios": "^0.14.0",
+    "babel-cli": "^6.16.0",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "css-loader": "^0.25.0",
