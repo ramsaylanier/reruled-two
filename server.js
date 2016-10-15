@@ -1,4 +1,5 @@
 import express from 'express'
+import expressSession from 'express-session'
 import path from 'path'
 import webpack from 'webpack'
 import webpackMiddleware from 'webpack-dev-middleware'
@@ -20,8 +21,15 @@ app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
 
+app.use(expressSession({
+  secret: 'secret', // TODO setup config to store the secret
+  resave: false,
+  saveUninitialized: false
+}))
+
 app.use(bodyParser.json())
 app.use(passport.initialize())
+app.use(passport.session())
 app.use('/', authRoutes)
 
 if (isDev) {
@@ -50,7 +58,6 @@ if (isDev) {
     res.sendFile(path.join(__dirname, 'dist/index.html'))
   })
 }
-
 
 app.listen(port, '0.0.0.0', function onStart (err) {
   if (err) {

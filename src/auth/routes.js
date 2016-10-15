@@ -5,9 +5,12 @@ let router = express.Router()
 router.post('/login',
   passport.authenticate('local'),
   (req, res) => {
-    console.log(req.user)
+    const user = {
+      id: req.user._id,
+      username: req.user._source.username
+    }
     res.send({
-      user: req.user
+      user: user
     })
   }
 )
@@ -25,6 +28,22 @@ router.get('/user',
       res.send({user: req.session.passport.user})
     } else {
       res.redirect('/login')
+    }
+  }
+)
+
+router.post('/check-session',
+  (req, res) => {
+    const isLoggedIn = req.isAuthenticated()
+    if (isLoggedIn) {
+      return res.json({
+        loggedIn: isLoggedIn,
+        user: req.user
+      })
+    } else {
+      return res.json({
+        message: 'not authenticated'
+      })
     }
   }
 )
