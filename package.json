@@ -58,6 +58,7 @@
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
     "react-router-redux": "^4.0.6",
+    "request": "^2.75.0",
     "resolve-url": "^0.2.1",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.2",
