@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+$copy: 'Open Sans', sans-serif;
+
+body{
+  font-family: $copy;
+}
+
+a{
+  text-decoration: none;
+}
+
+.link{
+  color: $primary;
+}
