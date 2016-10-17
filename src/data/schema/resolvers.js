@@ -14,8 +14,8 @@ function getSource (results) {
 
 const resolvers = {
   Query: {
-    games () {
-      return GameDatabase.findGames().then(res => {
+    games (root, {title}) {
+      return GameDatabase.findGames(title).then(res => {
         const {hits} = res.hits
         return getSource(hits)
       })

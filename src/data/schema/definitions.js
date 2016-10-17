@@ -10,7 +10,7 @@ export default `
   }
 
   type Query {
-    games: [Game]
+    games(title: String): [Game]
     user(username: String): User
   }
 

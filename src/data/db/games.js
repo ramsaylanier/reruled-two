@@ -17,10 +17,17 @@ db.createGame = function (game) {
     }
   })
 }
-db.findGames = function () {
+db.findGames = function (title) {
   return this.client.search({
     index: this.index,
-    type: 'game'
+    type: 'game',
+    body: {
+      query: {
+        matchPhrasePrefix: {
+          title: title
+        }
+      }
+    }
   })
 }
 
