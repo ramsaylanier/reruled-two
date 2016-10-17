@@ -1,10 +1,12 @@
 import React from 'react'
+import {withRouter} from 'react-router'
 import {Form, FormControl} from './form/form'
 import CSSModules from 'react-css-modules'
 import formStyles from './form/form.scss'
 import inputStyles from './form/input.scss'
 import _ from 'lodash'
 import AUTH_API from '../auth/api'
+import {store} from '../apollo'
 
 const styles = _.merge(formStyles, inputStyles)
 
@@ -14,7 +16,12 @@ class Login extends React.Component {
     e.preventDefault()
     const username = this._username.value
     const password = this._password.value
-    AUTH_API.login(username, password)
+    AUTH_API.login(username, password).then(res => {
+      if (res.data.user) {
+        store.dispatch({type: 'LOG_IN', user: res.data.user})
+        this.props.router.push(`/user/${res.data.user.username}`)
+      }
+    })
   }
 
   render () {
@@ -22,7 +29,7 @@ class Login extends React.Component {
       <Form action={this._handleLogin}>
         <FormControl>
           <label styleName="label">Username</label>
-          <input type="text" name="username" placeholder="username" ref={(c) => this._username = c}/>
+          <input type="text" name="username" placeholder="username" ref={ (c) => this._username = c}/>
         </FormControl>
 
         <FormControl>
@@ -38,4 +45,4 @@ class Login extends React.Component {
   }
 }
 
-export default CSSModules(Login, styles)
+export default CSSModules(withRouter(Login), styles)

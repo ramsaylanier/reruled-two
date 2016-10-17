@@ -1,6 +1,6 @@
 import passport from 'passport'
 import {Strategy} from 'passport-local'
-import {UserDatabase} from '../data/db/users'
+import UserDatabase from '../data/db/users'
 import {authenticateUser} from './auth'
 
 passport.use(new Strategy(
@@ -18,16 +18,16 @@ passport.use(new Strategy(
 ))
 
 passport.serializeUser((user, done) => {
-  console.log('serializeUser: ', user)
   const User = {
-    id: user._id
+    id: user._id,
+    username: user._source.username
   }
   done(null, User)
 })
 
 passport.deserializeUser((user, done) => {
-  console.log('deserializeUser: ', user)
-  return UserDatabase.findUserByUsername(user).then(r => {
+  const {username} = user
+  return UserDatabase.findUserByUsername(username).then(r => {
     done(null, user)
   })
 })

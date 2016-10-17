@@ -9,7 +9,6 @@ export default class AUTH_API {
   })
 
   static login (username, password) {
-    console.log(Config.get().auth.host)
     return this.instance.post('/login', {
       username, password
     })
@@ -17,6 +16,10 @@ export default class AUTH_API {
 
   static logout () {
     return this.instance.get('/logout')
+  }
+
+  static checkSession () {
+    return this.instance.post('/check-session')
   }
 
 }

@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -15,6 +17,10 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
+    new WriteFilePlugin(),
+    new ExtractTextPlugin('app.css', {
+      allChunks: true
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"development"'
     }),
@@ -40,15 +46,16 @@ module.exports = {
         test: /\.css$/,
         loaders: [
           'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'postcss-loader'
         ]
       }, {
         test: /\.scss$/,
         loaders: [
           'style?sourceMap',
           'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-          'resolve-url',
-          'sass?sourceMap'
+          'sass?sourceMap',
+          'postcss-loader'
         ]
       }
     ]

@@ -4,7 +4,7 @@ import GameDatabase from '../db/games'
 import UserDatabase from '../db/users'
 
 // get the source of each elasticsearch hit
-function getSource (results, fields) {
+function getSource (results) {
   const sanitizedResults = _.map(results, (o) => {
     return o._source
   })
@@ -14,10 +14,20 @@ function getSource (results, fields) {
 
 const resolvers = {
   Query: {
-    games () {
-      return GameDatabase.findGames().then(res => {
+    games (root, {title}) {
+      return GameDatabase.findGames(title).then(res => {
         const {hits} = res.hits
         return getSource(hits)
+      })
+    },
+    user (root, {username}) {
+      return UserDatabase.findUserByUsername(username).then(res => {
+        const user = {
+          id: res._id,
+          username: res._source.username
+        }
+        console.log(user)
+        return user
       })
     }
   }

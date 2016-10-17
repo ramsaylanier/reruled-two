@@ -1,8 +1,10 @@
+@import '../../styles/colors';
+
 .base{
   padding: .5rem;
-  background-color: black;
+  background-color: $secondary;
 }
 
 .link{
-  composes: link from '../../styles/links.scss'
+  color: $primary;
 }
