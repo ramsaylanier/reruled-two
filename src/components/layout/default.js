@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../header/header'
-import '../../styles/global.scss'
+import '../../styles.scss'
 
 const DefaultLayout = (props) => {
   return (
