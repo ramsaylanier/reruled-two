@@ -1,8 +1,9 @@
 import React from 'react'
 import {ApolloProvider} from 'react-apollo'
 import {Router, Route, IndexRoute, browserHistory} from 'react-router'
-import Home from './components/home'
+import Homepage from './components/layout/pages/homepage'
 import Login from './components/login'
+import GameSingle from './components/games/gameSingle'
 import UserProfile from './components/profile/UserProfile'
 import Layout from './components/layout/default'
 import {client, store} from './apollo'
@@ -27,9 +28,10 @@ const App = (props) => {
     <ApolloProvider client={client} store={store}>
       <Router history={history}>
         <Route path="/" component={Layout} onEnter={checkForUserSession}>
-          <IndexRoute component={Home}/>
+          <IndexRoute component={Homepage}/>
           <Route path="login" component={Login}/>
           <Route path="/user/:username" component={UserProfile}/>
+          <Route path="/games/:title" component={GameSingle}/>
         </Route>
       </Router>
     </ApolloProvider>

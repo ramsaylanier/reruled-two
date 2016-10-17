@@ -1,0 +1,45 @@
+@import '../../../styles/colors';
+
+.wrapper{
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.list{
+  margin: 0;
+  padding: 0;
+  border: 2px solid $primary;
+}
+
+.item{
+  list-style: none;
+  &:not(:last-of-type){
+    border-bottom: 1px solid fade-out($primary, .8);
+  }
+}
+
+.link{
+  composes: link from '../../../styles.scss';
+  display: block;
+  padding: .75rem .5rem;
+  background-color: transparent;
+  transition: background-color 150ms ease-out;
+
+
+  &:hover{
+    background-color: $primary;
+    color: white;
+  }
+}
+
+.field{
+  padding: 1rem;
+  font-size: 1.3rem;
+  background-color: $primary;
+  width: 100%;
+  border: 0;
+  color: white;
+  &::placeholder{
+    color: white;
+  }
+}

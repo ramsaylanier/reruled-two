@@ -1,0 +1,13 @@
+.list{
+  margin: 0;
+  padding: 0;
+}
+
+.item{
+  padding: .25rem;
+  background-color: darken(white, 10%);
+  list-style: none;
+  &:not(:last-of-type){
+    margin-bottom: 1rem;
+  }
+}
