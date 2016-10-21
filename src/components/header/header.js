@@ -1,17 +1,19 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import MenuToggle from '../menu/menuToggle'
 import CSSModules from 'react-css-modules'
 import styles from './header.scss'
-import {Link} from 'react-router'
 
 const Header = (props) => {
   return (
     <header styleName="base">
-      <ul>
-        <Link to="/" styleName="link">Home</Link>
-        <Link to="/login" styleName="link">Login</Link>
-      </ul>
+      <MenuToggle/>
     </header>
   )
 }
 
-export default CSSModules(Header, styles)
+function mapStateToProps (state) {
+  return {user: state.user}
+}
+
+export default connect(mapStateToProps)(CSSModules(Header, styles))

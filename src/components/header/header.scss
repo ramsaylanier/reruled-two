@@ -1,8 +1,14 @@
 @import '../../styles/colors';
 
 .base{
+  position: relative;
+  height: 40px;
   padding: .5rem;
   background-color: $secondary;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 100;
 }
 
 .link{

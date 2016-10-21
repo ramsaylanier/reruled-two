@@ -1,0 +1,42 @@
+@import "../../styles/colors";
+
+.toggle{
+
+}
+
+.bar{
+  height: 2px;
+  width: 23px;
+  background-color: $primary;
+  border-radius: 10px;
+
+  &:not(:last-of-type){
+    margin-bottom: 4px;
+  }
+}
+
+.main{
+  background-color: white;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: 100%;
+  padding-top: 80px;
+  position: fixed;
+  right: -100%;
+  top: 0;
+  width: 100%;
+  z-index: 90;
+}
+
+.list{
+  padding: 0;
+}
+
+.item{
+  display: block;
+}
+
+.link{
+  color: $primary;
+}
