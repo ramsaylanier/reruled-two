@@ -18,7 +18,17 @@ const formControl = (props) => {
   )
 }
 
+const label = (props) => {
+  const {type = ''} = props
+  return (
+    <label styleName={`label ${type}`}>
+      {props.children}
+    </label>
+  )
+}
+
 const Form = CSSModules(form, styles)
 const FormControl = CSSModules(formControl, styles)
+const Label = CSSModules(label, styles, {allowMultiple: true})
 
-export {Form, FormControl}
+export {Form, FormControl, Label}

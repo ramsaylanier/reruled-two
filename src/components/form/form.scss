@@ -1,7 +1,22 @@
+@import "../../styles";
+
 .base{
-  background-color: red;
+  background-color: $primary;
 }
 
 .control{
   padding: 1rem;
+}
+
+.label{
+  font-size: .9rem;
+  margin-bottom: .25rem;
+
+  &.block{
+    display: block;
+  }
+}
+
+.wrapper{
+  composes: tight-wrapper from '../../styles.scss';
 }
