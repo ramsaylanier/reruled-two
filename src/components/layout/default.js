@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from '../header/header'
-import '../../styles.scss'
+import MainNav from '../menu/mainNav'
 
 const DefaultLayout = (props) => {
   return (
     <div>
-      <Header/>
+      <Header {...props}/>
+      <MainNav />
       {props.children}
     </div>
   )
