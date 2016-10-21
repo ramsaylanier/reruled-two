@@ -1,0 +1,30 @@
+@import '../../../styles/colors';
+
+.base{
+  border: 0;
+  padding: .5rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.text, .password{
+  color: $primary;
+  border-bottom: 1px solid $primary;
+  background-color: darken(white, 5%);
+  transition: all 150ms ease-out;
+
+  &:focus{
+    outline: none;
+    background-color: $primary;
+    color: white;
+
+    &::placeholder{
+      color: white;
+    }
+  }
+}
+
+.submit{
+  composes: button primary from '../../../styles.scss';
+  font-size: 1.2rem;
+}

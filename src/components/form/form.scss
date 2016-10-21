@@ -1,7 +1,7 @@
 @import "../../styles";
 
 .base{
-  background-color: $primary;
+  padding: .5rem;
 }
 
 .control{
@@ -15,8 +15,4 @@
   &.block{
     display: block;
   }
-}
-
-.wrapper{
-  composes: tight-wrapper from '../../styles.scss';
 }
