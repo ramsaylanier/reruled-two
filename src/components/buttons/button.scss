@@ -1,0 +1,13 @@
+@import '../../styles/colors';
+
+.button{
+  border: 0;
+  padding: .5rem;
+  border-radius: 3px;
+}
+
+.primary{
+  composes: button;
+  background-color: $primary;
+  color: white;
+}
