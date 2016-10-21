@@ -21,7 +21,7 @@ function checkForUserSession (nextState, replace, callback) {
   })
 }
 
-function logOut (nextState, replace, cb) {
+function logOut (nextState, replace, callback) {
   return authApi.logout().then(res => {
     store.dispatch({type: 'LOG_OUT'})
     replace({
@@ -31,7 +31,7 @@ function logOut (nextState, replace, cb) {
       }
     })
 
-    cb()
+    callback()
   })
 }
 

@@ -7,10 +7,6 @@ import TweenMax from 'gsap'
 import MenuItem from './menuItem'
 
 class MainNav extends React.Component {
-  componentDidMount () {
-    console.log(this.props.ui.navOpen)
-  }
-
   componentWillReceiveProps (nextProps) {
     let dX = '0%'
     if (nextProps.ui.navOpen) {
@@ -30,7 +26,7 @@ class MainNav extends React.Component {
           <MenuItem><Link to="/logout" styleName="link">Logout</Link></MenuItem>
         </ul>
         <ul styleName="list">
-          <MenuItem><Link to="/" styleName="link">Home</Link></MenuItem>
+          <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
         </ul>
       </div>
     )

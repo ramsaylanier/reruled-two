@@ -15,7 +15,6 @@ class MenuItem extends React.Component {
 }
 
 function mapDispatchToProps (dispatch) {
-  console.log(dispatch)
   return {
     closeMainNav: () => {
       dispatch({type: CLOSE_NAV})

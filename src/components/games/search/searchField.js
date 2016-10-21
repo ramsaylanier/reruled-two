@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import SearchResults from './searchResults'
 import CSSModules from 'react-css-modules'
 import styles from './search.scss'
-
+import Wrapper from 'components/layout/wrapper/wrapper'
 class SearchField extends React.Component {
   constructor () {
     super()
@@ -19,7 +19,7 @@ class SearchField extends React.Component {
   render () {
     const {games} = this.props.data
     return (
-      <div styleName="wrapper">
+      <Wrapper>
         <input
           styleName="field"
           type="text"
@@ -30,7 +30,7 @@ class SearchField extends React.Component {
         {games &&
           <SearchResults games={this.props.data.games}/>
         }
-      </div>
+      </Wrapper>
     )
   }
 }
