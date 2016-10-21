@@ -11,6 +11,11 @@ module.exports = {
     'webpack-hot-middleware/client',
     path.join(__dirname, 'src/index.js')
   ],
+  resolve: {
+    root: [
+      path.resolve('./src')
+    ]
+  },
   output: {
     path: path.join(__dirname, '/dist/'),
     filename: '[name].js',
