@@ -1,9 +1,13 @@
-import { OPEN_NAV, CLOSE_NAV, TOGGLE_DRAWER } from '../actions/actions'
+import { OPEN_NAV, CLOSE_NAV, TOGGLE_DRAWER, THROW_NOTIFICATION } from '../actions/actions'
 
 let initialUIState = {
   navOpen: false,
   drawerOpen: false,
-  drawerContent: null
+  drawerContent: null,
+  notification: {
+    message: null,
+    messageType: null
+  }
 }
 
 export default function uiReducer (state = initialUIState, action) {
@@ -15,7 +19,14 @@ export default function uiReducer (state = initialUIState, action) {
     case TOGGLE_DRAWER:
       return Object.assign({}, state, {
         drawerOpen: action.isOpen,
-        drawerContent: action.content
+        drawerContent: action.content || state.drawerContent
+      })
+    case THROW_NOTIFICATION:
+      return Object.assign({}, state, {
+        notification: {
+          message: action.message,
+          messageType: action.messageType
+        }
       })
     default:
       return state

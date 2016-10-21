@@ -4,6 +4,7 @@ export const OPEN_NAV = 'OPEN_NAV'
 export const CLOSE_NAV = 'CLOSE_NAV'
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
 export const SET_CURRENT_GAME = 'SET_CURRENT_GAME'
+export const THROW_NOTIFICATION = 'THROW_NOTIFICATION'
 
 export function login (user) {
   return {
@@ -42,5 +43,13 @@ export function setCurrentGame (currentGame) {
   return {
     type: SET_CURRENT_GAME,
     currentGame: currentGame
+  }
+}
+
+export function throwNotification ({message, messageType}) {
+  return {
+    type: THROW_NOTIFICATION,
+    message: message,
+    messageType: messageType
   }
 }
