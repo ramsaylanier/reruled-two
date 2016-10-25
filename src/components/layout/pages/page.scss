@@ -1,5 +1,16 @@
+@import "../../../styles/colors";
+
 .base{
   position: relative;
   min-height: 100vh;
+}
+
+.header{
+  padding: 1rem;
+  background-color: $primary;
+  color: white;
+}
+
+.content{
   padding: 1rem;
 }
