@@ -1,10 +1,12 @@
 import React from 'react'
-import CSSModules from 'react-css-modules'
-import styles from './menus.scss'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import TweenMax from 'gsap'
+import {Page, PageHeader, PageContent} from 'components/layout/pages'
+import {List} from 'components/layout/list'
 import MenuItem from './menuItem'
+import CSSModules from 'react-css-modules'
+import styles from './menus.scss'
 
 class MainNav extends React.Component {
   componentWillReceiveProps (nextProps) {
@@ -20,27 +22,29 @@ class MainNav extends React.Component {
 
   _renderLinksWithUser (username) {
     return (
-      <div>
-        <ul styleName="list">
-          <MenuItem><Link to={`/user/${username}`} styleName="link">{username}</Link></MenuItem>
-          <MenuItem><Link to="/logout" styleName="link">Logout</Link></MenuItem>
-        </ul>
-        <ul styleName="list">
-          <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
-        </ul>
-      </div>
+      <Page>
+        <PageHeader type="light">
+            <MenuItem><Link to={`/user/${username}`} styleName="link">{username}</Link></MenuItem>
+            <MenuItem><Link to="/logout" styleName="link">Logout</Link></MenuItem>
+        </PageHeader>
+        <PageContent>
+          <List>
+            <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
+          </List>
+        </PageContent>
+      </Page>
     )
   }
 
   _renderLinksWithoutUser () {
     return (
       <div>
-        <ul styleName="list">
+        <List>
           <MenuItem><Link to="/login" styleName="link">Login</Link></MenuItem>
-        </ul>
-        <ul styleName="list">
-          <MenuItem><Link to="/" styleName="link">Home</Link></MenuItem>
-        </ul>
+        </List>
+        <List>
+          <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
+        </List>
       </div>
     )
   }
@@ -63,4 +67,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(CSSModules(MainNav, styles))
+export default connect(mapStateToProps)(CSSModules(MainNav, styles, {allowMultiple: true}))

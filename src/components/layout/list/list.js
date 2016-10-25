@@ -3,9 +3,10 @@ import CSSModules from 'react-css-modules'
 import styles from './list.scss'
 
 const List = (props) => {
+  const {type = '', children} = props;
   return (
-    <ul styleName={`base ${props.type}`}>
-      {props.children}
+    <ul styleName={`base ${type}`}>
+      {children}
     </ul>
   )
 }
