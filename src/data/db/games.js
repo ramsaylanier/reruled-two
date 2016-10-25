@@ -2,7 +2,7 @@ import db from '../db'
 
 db.checkIfGamesTypeExists = function () {
   return this.client.indices.existsType({
-    index: this.index,
+    index: 'reruled_games',
     type: 'game'
   })
 }
@@ -10,7 +10,7 @@ db.checkIfGamesTypeExists = function () {
 db.createGame = function (game) {
   const {title} = game
   return this.client.create({
-    index: this.index,
+    index: 'reruled_games',
     type: 'game',
     body: {
       title: title
@@ -19,11 +19,24 @@ db.createGame = function (game) {
 }
 db.findGames = function (title) {
   return this.client.search({
-    index: this.index,
+    index: 'reruled_games',
     type: 'game',
     body: {
       query: {
         matchPhrasePrefix: {
+          title: title
+        }
+      }
+    }
+  })
+}
+db.findGameByTitle = function (title) {
+  return this.client.search({
+    index: 'reruled_games',
+    type: 'game',
+    body: {
+      query: {
+        match: {
           title: title
         }
       }
