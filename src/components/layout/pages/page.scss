@@ -2,13 +2,29 @@
 
 .base{
   position: relative;
-  min-height: 100vh;
+  width: 100%;
 }
 
 .header{
   padding: 1rem;
-  background-color: $primary;
   color: white;
+  background-color: $primary;
+
+  &.primary{
+    background-color: $primary;
+  }
+
+  &.light{
+    background-color: white;
+  }
+
+  &.secondary{
+    background-color: $secondary;
+  }
+
+  &.tertiary{
+    background-color: $tertiary;
+  }
 }
 
 .content{

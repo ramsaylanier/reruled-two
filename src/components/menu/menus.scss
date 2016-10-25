@@ -21,7 +21,7 @@
   flex-flow: column;
   align-items: center;
   height: 100%;
-  padding-top: 80px;
+  padding-top: 40px;
   position: fixed;
   right: -100%;
   top: 0;
@@ -30,14 +30,22 @@
   border-left: 1px solid $primary;
 }
 
-.list{
-  padding: 0;
+.username{
+  margin: 0;
 }
+
 
 .item{
   display: block;
 }
 
 .link{
-  color: $primary;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.list{
+  .base{
+    background-color: blue;
+  }
 }

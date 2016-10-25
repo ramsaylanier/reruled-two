@@ -11,3 +11,23 @@
   background-color: $primary;
   color: white;
 }
+
+.toggle{
+  background-color: $primary;
+  border: 0;
+  border-radius: 50%;
+  bottom: 3rem;
+  color: white;
+  font-size: 2rem;
+  height: 2.5rem;
+  line-height: 1;
+  font-weight: 100;
+  position: fixed;
+  right: 1rem;
+  width: 2.5rem;
+  z-index: 99;
+
+  &:focus{
+    outline: none;
+  }
+}
