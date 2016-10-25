@@ -5,12 +5,21 @@ import styles from './Notification.scss'
 
 class Notification extends React.Component {
   render () {
-    const {message, messageType = ''} = this.props.notification
-    return (
-      <div styleName={`container ${messageType}`}>
-        <p styleName="text">{message}</p>
-      </div>
-    )
+    const {notification} = this.props
+    if (notification) {
+      const {message, messageType = ''} = this.props.notification
+      return (
+        <div styleName={`container ${messageType}`}>
+          <p styleName="text">{message}</p>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <p styleName="text"></p>
+        </div>
+      )
+    }
   }
 }
 
