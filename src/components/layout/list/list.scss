@@ -1,0 +1,17 @@
+.base{
+  padding: 0;
+
+  &.no-style{
+    list-style: none;
+  }
+}
+
+.item{
+  padding: 1rem .5rem;
+  background-color: darken(white, 3%);
+  border-radius: 3px;
+
+  &:not(:last-of-type){
+    margin-bottom: .5rem;
+  }
+}
