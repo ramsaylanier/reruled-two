@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules'
 import {connect} from 'react-redux'
 import styles from './drawer.scss'
 import TweenMax from 'gsap'
-import {TOGGLE_DRAWER} from 'state/actions/actions'
+
 class Drawer extends React.Component {
   componentWillReceiveProps (nextProps) {
     let dX = '0%'
@@ -20,7 +20,6 @@ class Drawer extends React.Component {
     const drawerClass = 'base'
     return (
       <div styleName={drawerClass} ref={ c => { this._drawer = c }}>
-        <button onClick={ () => this.props.toggleDrawer()}>X</button>
         {this.props.ui.drawerContent}
       </div>
     )
@@ -34,15 +33,4 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    toggleDrawer: () => {
-      dispatch({
-        type: TOGGLE_DRAWER,
-        isOpen: false
-      })
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(Drawer, styles, {allowMultiple: true}))
+export default connect(mapStateToProps)(CSSModules(Drawer, styles, {allowMultiple: true}))
