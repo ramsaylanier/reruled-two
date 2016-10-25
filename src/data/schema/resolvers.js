@@ -64,8 +64,8 @@ const RulesetResolvers = {
       return hits[0]._source
     })
   },
-  author (root, {username}) {
-    return UserDatabase.findUserByUsername(username).then(res => {
+  author (root) {
+    return UserDatabase.findUserByUsername(root.author.username).then(res => {
       const user = {
         id: res._id,
         username: res._source.username
