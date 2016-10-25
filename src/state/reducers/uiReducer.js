@@ -3,11 +3,7 @@ import { OPEN_NAV, CLOSE_NAV, TOGGLE_DRAWER, THROW_NOTIFICATION } from '../actio
 let initialUIState = {
   navOpen: false,
   drawerOpen: false,
-  drawerContent: null,
-  notification: {
-    message: null,
-    messageType: null
-  }
+  drawerContent: null
 }
 
 export default function uiReducer (state = initialUIState, action) {
