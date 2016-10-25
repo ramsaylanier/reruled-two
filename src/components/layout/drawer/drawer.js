@@ -6,7 +6,6 @@ import TweenMax from 'gsap'
 import {TOGGLE_DRAWER} from 'state/actions/actions'
 class Drawer extends React.Component {
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     let dX = '0%'
     if (nextProps.ui.drawerOpen) {
       dX = '-100%'
@@ -18,7 +17,7 @@ class Drawer extends React.Component {
   }
 
   render () {
-    const drawerClass = `base ${this.props.type || ''}`
+    const drawerClass = 'base'
     return (
       <div styleName={drawerClass} ref={ c => { this._drawer = c }}>
         <button onClick={ () => this.props.toggleDrawer()}>X</button>
