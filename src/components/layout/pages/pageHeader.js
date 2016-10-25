@@ -2,14 +2,13 @@ import React from 'react'
 import CSSModules from 'react-css-modules'
 import styles from './page.scss'
 
-class PageHeader extends React.Component {
-  render () {
-    return (
-      <div styleName="header">
-        {this.props.children}
-      </div>
-    )
-  }
+const PageHeader = (props) => {
+  const {type = '', children} = props
+  return (
+    <div styleName={`header ${type}`}>
+      {children}
+    </div>
+  )
 }
 
-export default CSSModules(PageHeader, styles)
+export default CSSModules(PageHeader, styles, {allowMultiple: true})
