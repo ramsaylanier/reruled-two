@@ -1,6 +1,7 @@
 import React from 'react'
-import Page from 'components/layout/pages/page'
-import NewRulesetButton from 'components/buttons/newRulesetButton'
+import {Page, PageHeader, PageContent} from 'components/layout/pages'
+import DrawerToggleButton from 'components/buttons/drawerToggleButton'
+import NewRulesetForm from 'components/rulesets/newRulesetForm'
 import {List, ListItem} from 'components/layout/list'
 import {Link} from 'react-router'
 import CSSModules from 'react-css-modules'
@@ -14,23 +15,25 @@ const GameSingle = (props) => {
   const {rulesets} = data
   return (
     <Page>
-      <h1>{props.params.title}</h1>
-
-      {user.id &&
-        <NewRulesetButton/>
-      }
-
-      {rulesets &&
-        <List type="no-style">
-          {rulesets.map(ruleset => {
-            return (
-              <ListItem>
-                <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
-              </ListItem>
-            )
-          })}
-        </List>
-      }
+      <PageHeader type="primary">
+        <h1>{props.params.title}</h1>
+        {user.id &&
+          <DrawerToggleButton drawerContent={<NewRulesetForm/>}/>
+        }
+      </PageHeader>
+      <PageContent>
+        {rulesets &&
+          <List type="no-style">
+            {rulesets.map(ruleset => {
+              return (
+                <ListItem>
+                  <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
+                </ListItem>
+              )
+            })}
+          </List>
+        }
+      </PageContent>
     </Page>
   )
 }
