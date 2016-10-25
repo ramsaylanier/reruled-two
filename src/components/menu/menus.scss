@@ -16,7 +16,7 @@
 }
 
 .main{
-  background-color: white;
+  background-color: darken(white, 3%);
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -27,6 +27,7 @@
   top: 0;
   width: 100%;
   z-index: 90;
+  border-left: 1px solid $primary;
 }
 
 .list{
