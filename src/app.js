@@ -4,6 +4,7 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router'
 import Homepage from './components/layout/pages/homepage'
 import Login from './components/layout/pages/login'
 import GameSingle from './components/games/gameSingle'
+import RulesetSingle from './components/rulesets/rulesetSingle'
 import UserProfile from './components/profile/UserProfile'
 import Layout from './components/layout/default'
 import {client, store} from './apollo'
@@ -35,6 +36,15 @@ function logOut (nextState, replace, callback) {
   })
 }
 
+function setCurrentGame (nextState, replace, callback) {
+  store.dispatch({
+    type: 'SET_CURRENT_GAME',
+    currentGame: nextState.params.title
+  })
+
+  callback()
+}
+
 const history = syncHistoryWithStore(browserHistory, store)
 const App = (props) => {
   return (
@@ -45,7 +55,8 @@ const App = (props) => {
           <IndexRoute component={Homepage}/>
           <Route path="login" component={Login}/>
           <Route path="/user/:username" component={UserProfile}/>
-          <Route path="/games/:title" component={GameSingle}/>
+          <Route path="/games/:title" component={GameSingle} onEnter={setCurrentGame} />
+          <Route path="/ruleset/:id" component={RulesetSingle} />
         </Route>
       </Router>
     </ApolloProvider>
