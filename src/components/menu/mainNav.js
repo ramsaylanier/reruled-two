@@ -24,7 +24,6 @@ class MainNav extends React.Component {
     return (
       <Page>
         <PageHeader type="light">
-            <MenuItem><Link to={`/user/${username}`} styleName="link">{username}</Link></MenuItem>
             <MenuItem><Link to="/logout" styleName="link">Logout</Link></MenuItem>
         </PageHeader>
         <PageContent>
@@ -38,14 +37,17 @@ class MainNav extends React.Component {
 
   _renderLinksWithoutUser () {
     return (
-      <div>
-        <List>
-          <MenuItem><Link to="/login" styleName="link">Login</Link></MenuItem>
-        </List>
-        <List>
-          <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
-        </List>
-      </div>
+      <Page>
+        <PageHeader type="light">
+            <MenuItem><Link to="/login" styleName="link">Login</Link></MenuItem>
+            <MenuItem><Link to="/register" styleName="link">Register</Link></MenuItem>
+        </PageHeader>
+        <PageContent>
+          <List>
+            <MenuItem><Link to="/" styleName="link">Games</Link></MenuItem>
+          </List>
+        </PageContent>
+      </Page>
     )
   }
 

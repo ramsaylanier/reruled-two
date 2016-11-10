@@ -50,6 +50,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "graphql": "^0.7.1",
+    "graphql-server-express": "^0.4.3",
     "graphql-tag": "^0.1.14",
     "graphql-tools": "^0.7.2",
     "gsap": "^1.19.0",
@@ -68,6 +69,7 @@
     "resolve-url": "^0.2.1",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.2",
+    "sessionstore": "^1.2.16",
     "style-loader": "^0.13.1"
   }
 }

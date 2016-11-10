@@ -1,7 +1,6 @@
 import db from '../db'
 
 db.createRuleset = function (ruleset) {
-  console.log(ruleset)
   return this.client.create({
     index: 'reruled_rulesets',
     type: 'ruleset',
@@ -18,7 +17,6 @@ db.getRuleset = function (id) {
 }
 
 db.getRulesetsByGame = function (game) {
-  console.log(game)
   return this.client.search({
     index: 'reruled_rulesets',
     type: 'ruleset',

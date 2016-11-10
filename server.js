@@ -5,9 +5,11 @@ import webpack from 'webpack'
 import webpackMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from './webpack.config'
+import Config from 'config'
+import sessionstore from 'sessionstore'
 import bodyParser from 'body-parser'
-import {loadGamesFromTestData, loadUsersFromTestData, loadGamesFromExternalSource} from './utils/utils'
-import {apolloExpress, graphiqlExpress} from 'apollo-server'
+import {loadUsersFromTestData, loadGamesFromExternalSource} from './utils/utils'
+import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
 import graphQLSchema from './src/data/schema/schema'
 import passport from './src/auth/config'
 import authRoutes from './src/auth/routes'
@@ -16,15 +18,26 @@ const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
 const app = express()
 
-app.use('/graphql', bodyParser.json(), apolloExpress({schema: graphQLSchema}))
+app.use('/graphql', bodyParser.json(), graphqlExpress({
+  schema: graphQLSchema
+}))
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
 
 app.use(expressSession({
-  secret: 'secret', // TODO setup config to store the secret
+  secret: 'secret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: sessionstore.createSessionStore({
+    type: 'elasticsearch',
+    host: Config.get('elasticsearch.host'),    // optional
+    prefix: '',                // optional
+    index: Config.get('elasticsearch.indicies.session'),          // optional
+    typeName: 'session',       // optional
+    pingInterval: 1000,        // optional
+    timeout: 10000             // optional
+  })
 }))
 
 app.use(bodyParser.json())
@@ -51,6 +64,7 @@ if (isDev) {
   app.use(webpackHotMiddleware(compiler))
   app.get('*', function response (req, res) {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')))
+    res.end()
   })
 } else {
   app.use(express.static(path.join(__dirname, '/dist')))

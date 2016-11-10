@@ -10,7 +10,7 @@ import Input from 'components/form/input/input'
 import styles from './rules.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
-import {throwNotification} from 'state/actions/actions'
+import {throwNotification, toggleDrawer} from 'state/actions/actions'
 
 const typeOptions = [
   {value: 'setup', text: 'Setup'},
@@ -28,32 +28,31 @@ class NewRuleForm extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    console.log(this._ruleType)
     const rule = {
-      author: this.props.user,
       type: this._ruleType.state.value,
       description: this._ruleDescription.state.value,
-      game: this.props.currentGame
+      ruleset: this.props.rulesetid,
+      author: this.props.user
     }
 
-    console.log(rule)
-
-    // this.props.createNewRule(rule).then(res => {
-    //   this.props.throwNotification({
-    //     message: 'Rule created!',
-    //     messageType: 'success'
-    //   })
-    // }).catch(err => {
-    //   this.props.throwNotification({
-    //     message: err.message,
-    //     messageType: 'error'
-    //   })
-    // })
+    this.props.createNewRule(rule).then(res => {
+      this.props.throwNotification({
+        message: 'Rule created!',
+        messageType: 'success'
+      })
+      this.props.closeDrawer()
+    }).catch(err => {
+      this.props.throwNotification({
+        message: err.message,
+        messageType: 'error'
+      })
+    })
   }
 
   render () {
     return (
       <Form action={this.handleSubmit}>
+
         <FormControl>
           <Label type="block">Rule Type</Label>
           <Select options={typeOptions} ref={c => { this._ruleType = c }}/>
@@ -72,28 +71,31 @@ class NewRuleForm extends React.Component {
   }
 }
 
-const createRulesetMutation = gql`
-  mutation createRuleset($ruleset: RulesetInput!){
-    createRuleset(ruleset: $ruleset){
+const createRuleMutation = gql`
+  mutation createRule($rule: RuleInput!){
+    createRule(rule: $rule){
       id
-      name
+      description
+      type
     }
   }
 `
-const NewRuleFormWithMutation = graphql(createRulesetMutation, {
+const NewRuleFormWithMutation = graphql(createRuleMutation, {
   props ({ownProps, mutate}) {
     return {
       createNewRule (rule) {
         return mutate({
           variables: {
-            ruleset: ruleset
+            rule: rule
           },
           updateQueries: {
-            getRulesetsForGame: (prev, { mutationResult }) => {
-              const newRuleset = mutationResult.data.createRuleset
+            getRuleset: (prev, { mutationResult }) => {
+              const newRule = mutationResult.data.createRule
               return update(prev, {
-                rulesets: {
-                  $unshift: [newRuleset]
+                ruleset: {
+                  rules: {
+                    $unshift: [newRule]
+                  }
                 }
               })
             }
@@ -115,6 +117,9 @@ function mapDispatchToProps (dispatch) {
   return {
     throwNotification: (notification) => {
       dispatch(throwNotification(notification))
+    },
+    closeDrawer: () => {
+      dispatch(toggleDrawer(false))
     }
   }
 }

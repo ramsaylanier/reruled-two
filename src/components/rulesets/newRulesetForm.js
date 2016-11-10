@@ -8,7 +8,7 @@ import Input from 'components/form/input/input'
 import styles from './rulesets.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
-import {throwNotification} from 'state/actions/actions'
+import {throwNotification, toggleDrawer} from 'state/actions/actions'
 
 class NewRulesetForm extends React.Component {
 
@@ -19,23 +19,34 @@ class NewRulesetForm extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    const ruleset = {
-      author: this.props.user,
-      name: this._rulesetName.state.value,
-      game: this.props.currentGame
-    }
+    const rulesetName = this._rulesetName.state.value
 
-    this.props.createNewRuleset(ruleset).then(res => {
+    if (!rulesetName || rulesetName.length < 1) {
       this.props.throwNotification({
-        message: 'Ruleset created!',
-        messageType: 'success'
-      })
-    }).catch(err => {
-      this.props.throwNotification({
-        message: err.message,
+        message: 'You must give your ruleset a name.',
         messageType: 'error'
       })
-    })
+    } else {
+      const ruleset = {
+        author: this.props.user,
+        name: this._rulesetName.state.value,
+        game: this.props.currentGame
+      }
+
+      this.props.createNewRuleset(ruleset).then(res => {
+        this._rulesetName.value = ''
+        this.props.closeDrawer()
+        this.props.throwNotification({
+          message: 'Ruleset created!',
+          messageType: 'success'
+        })
+      }).catch(err => {
+        this.props.throwNotification({
+          message: err.message,
+          messageType: 'error'
+        })
+      })
+    }
   }
 
   render () {
@@ -73,11 +84,19 @@ const NewRulesetFormWithMutation = graphql(createRulesetMutation, {
           updateQueries: {
             getRulesetsForGame: (prev, { mutationResult }) => {
               const newRuleset = mutationResult.data.createRuleset
-              return update(prev, {
-                rulesets: {
-                  $unshift: [newRuleset]
-                }
-              })
+              if (prev.rulesets) {
+                return update(prev, {
+                  rulesets: {
+                    $unshift: [newRuleset]
+                  }
+                })
+              } else {
+                return update(prev, {
+                  rulesets: {
+                    $set: [newRuleset]
+                  }
+                })
+              }
             }
           }
         })
@@ -95,6 +114,9 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    closeDrawer: () => {
+      dispatch(toggleDrawer(false))
+    },
     throwNotification: (notification) => {
       dispatch(throwNotification(notification))
     }

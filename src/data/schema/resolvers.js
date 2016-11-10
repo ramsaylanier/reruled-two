@@ -3,6 +3,7 @@ import _ from 'lodash'
 import GameDatabase from '../db/games'
 import UserDatabase from '../db/users'
 import RulesetDatabase from '../db/rulesets'
+import RuleDatabase from '../db/rules'
 
 // get the source of each elasticsearch hit
 function getSource (results) {
@@ -14,11 +15,31 @@ function getSource (results) {
 }
 
 const MutationResolvers = {
+  createUser (root, {user}) {
+    return UserDatabase.createUser(user).then(res => {
+      return UserDatabase.getUser(user.username).then(user => {
+        return UserDatabase.shapeUser(user)
+      })
+    }).catch(err => {
+      const {status} = err
+      if (status === 409) {
+        throw new Error('Username already exists')
+      }
+    })
+  },
   createRuleset (root, ruleset) {
     return RulesetDatabase.createRuleset(ruleset).then(res => {
       const newRulesetId = res._id
       return RulesetDatabase.getRuleset(newRulesetId).then(ruleset => {
         return RulesetDatabase.shapeRuleset(ruleset)
+      })
+    })
+  },
+  createRule (root, rule) {
+    return RuleDatabase.createRule(rule).then(res => {
+      const newRule = res._id
+      return RuleDatabase.getRule(newRule).then(rule => {
+        return RuleDatabase.shapeRule(rule)
       })
     })
   }
@@ -54,6 +75,11 @@ const QueryReolvers = {
     }).catch(err => {
       console.log(err)
     })
+  },
+  rule (root, {id}) {
+    return RuleDatabase.getRule(id).then(rule => {
+      return RuleDatabase.shapeRule(rule)
+    })
   }
 }
 
@@ -72,12 +98,44 @@ const RulesetResolvers = {
       }
       return user
     })
+  },
+  rules (root) {
+    return RuleDatabase.getRulesByRulesetId(root.id).then(res => {
+      const {hits} = res.hits
+      return _.map(hits, rule => {
+        return RuleDatabase.shapeRule(rule)
+      })
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+}
+
+const RuleResolver = {
+  ruleset (root) {
+    return RulesetDatabase.getRuleset(root.ruleset.id).then(ruleset => {
+      return RulesetDatabase.shapeRuleset(ruleset)
+    }).catch(err => {
+      console.log(err)
+    })
+  },
+  author (root) {
+    return UserDatabase.findUserByUsername(root.author.username).then(res => {
+      const user = {
+        id: res._id,
+        username: res._source.username
+      }
+      return user
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 
 const resolvers = {
   Query: QueryReolvers,
   Ruleset: RulesetResolvers,
+  Rule: RuleResolver,
   Mutation: MutationResolvers
 }
 

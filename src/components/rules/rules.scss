@@ -1,0 +1,29 @@
+.item{
+  padding: 0rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: darken(white, 3%);
+  &:not(:last-of-type){
+    margin-bottom: .5rem;
+  }
+}
+
+.block{
+  display: block;
+}
+
+.description{
+  composes: block;
+  font-size: .9rem;
+  margin-right: .5rem;
+  padding: 1rem .5rem;
+}
+
+.type{
+  composes: block;
+  font-size: .8rem;
+  background-color: white;
+  padding: .25rem;
+  border-radius: 3px;
+  align-self: flex-start;
+}

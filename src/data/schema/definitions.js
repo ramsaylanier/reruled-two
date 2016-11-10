@@ -2,6 +2,7 @@ export default `
   type User {
     id: String
     username: String
+    email: String
   }
 
   type Game {
@@ -19,8 +20,10 @@ export default `
 
   type Rule {
     id: String
-    name: String
     author: User
+    ruleset: Ruleset
+    description: String
+    type: String
   }
 
   type Query {
@@ -28,21 +31,38 @@ export default `
     user(username: String): User
     ruleset(id: String): Ruleset
     rulesets(game: String): [Ruleset]
+    rule(id: String): Rule
   }
 
   input UserInput {
-    id: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
     username: String
+  }
+
+  input AuthorInput {
+    id: String!,
+    username: String!
   }
 
   input RulesetInput {
     name: String!,
     game: String!,
-    author: UserInput!
+    author: AuthorInput!
+  }
+
+  input RuleInput {
+    type: String!,
+    description: String!,
+    ruleset: String!,
+    author: AuthorInput!
   }
 
   type Mutation {
+    createUser(user: UserInput!): User
     createRuleset(ruleset: RulesetInput!): Ruleset
+    createRule(rule: RuleInput!): Rule
   }
 
   schema {

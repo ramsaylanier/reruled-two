@@ -21,8 +21,10 @@ class Login extends React.Component {
     const password = this._password.state.value
     AUTH_API.login(username, password).then(res => {
       if (res.data.user) {
+        console.log(this.context.router)
         store.dispatch({type: 'LOG_IN', user: res.data.user})
-        this.props.router.push(`/user/${res.data.user.username}`)
+        this.props.history.goBack()
+        // this.props.router.push(`/user/${res.data.user.username}`)
       }
     })
   }

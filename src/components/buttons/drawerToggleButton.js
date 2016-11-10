@@ -3,12 +3,11 @@ import CSSModules from 'react-css-modules'
 import styles from './button.scss'
 import {connect} from 'react-redux'
 import {TOGGLE_DRAWER} from 'state/actions/actions'
-import TweenMax from 'gsap'
+import {TweenMax, Power4} from 'gsap'
 
 class drawerToggleButton extends React.Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     const {drawerOpen} = nextProps
     const rotation = drawerOpen ? 45 : 0
     TweenMax.to(this._toggle, 0.5, {

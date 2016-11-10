@@ -1,7 +1,10 @@
 {
   "elasticsearch": {
     "host": "localhost:9200",
-    "index": "reruled"
+    "indicies": {
+      "session": "reruled_session",
+      "game": "reruled_games"
+    }
   },
   "auth":{
     "host": "http://localhost:3000"

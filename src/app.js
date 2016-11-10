@@ -3,6 +3,7 @@ import {ApolloProvider} from 'react-apollo'
 import {Router, Route, IndexRoute, browserHistory} from 'react-router'
 import Homepage from './components/layout/pages/homepage'
 import Login from './components/layout/pages/login'
+import Register from './components/layout/pages/register'
 import GameSingle from './components/games/gameSingle'
 import RulesetSingle from './components/rulesets/rulesetSingle'
 import UserProfile from './components/profile/UserProfile'
@@ -54,6 +55,7 @@ const App = (props) => {
         <Route path="/" component={Layout} onEnter={checkForUserSession}>
           <IndexRoute component={Homepage}/>
           <Route path="login" component={Login}/>
+          <Route path="register" component={Register}/>
           <Route path="/user/:username" component={UserProfile}/>
           <Route path="/games/:title" component={GameSingle} onEnter={setCurrentGame} />
           <Route path="/ruleset/:id" component={RulesetSingle} />
