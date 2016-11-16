@@ -16,14 +16,13 @@ class Select extends React.Component {
   }
 
   render () {
-    const {type = 'text', options} = this.props
+    const {options, styles, ...rest} = this.props
     return (
       <select
-        styleName={`base ${type}`}
-        type={type}
+        styleName={'select'}
         value={this.state.value}
         onChange={this.handleChange}
-        {...this.props}
+        {...rest}
       >
         {options.map(option => {
           return <option value={option.value}>{option.text}</option>

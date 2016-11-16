@@ -24,6 +24,10 @@
   }
 }
 
+.select{
+  composes: base text;
+}
+
 .submit{
   composes: button primary from '../../../styles.scss';
   font-size: 1.2rem;

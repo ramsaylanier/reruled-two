@@ -54,7 +54,7 @@ class NewRulesetForm extends React.Component {
       <Form action={this.handleSubmit}>
         <FormControl>
           <Label type="block">Ruleset Name</Label>
-          <Input name="ruleset name" placeholder="ruleset name" ref={c => { this._rulesetName = c }}/>
+          <Input name="ruleset name" value="test" placeholder="ruleset name" ref={c => { this._rulesetName = c }}/>
         </FormControl>
 
         <FormControl>

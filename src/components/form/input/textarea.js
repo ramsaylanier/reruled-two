@@ -16,14 +16,14 @@ class Textarea extends React.Component {
   }
 
   render () {
-    const {type = 'text'} = this.props
+    const {type = 'text', styles, ...rest} = this.props
     return (
       <textarea
         styleName={`base ${type}`}
         type={type}
         value={this.state.value}
         onChange={this.handleChange}
-        {...this.props}
+        {...rest}
       ></textarea>
     )
   }

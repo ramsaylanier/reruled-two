@@ -14,7 +14,8 @@ const RuleItem = (props) => {
 
 RuleItem.propTypes = {
   id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired
 }
 
 export default CSSModules(RuleItem, styles)

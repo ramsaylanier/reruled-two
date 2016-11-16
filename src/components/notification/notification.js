@@ -9,32 +9,32 @@ class Notification extends React.Component {
   constructor () {
     super()
     this._hideMessage = this._hideMessage.bind(this)
+    this._animateContainer = this._animateContainer.bind(this)
   }
 
-  componentDidMount () {
-    const el = this._container
-    if (el) {
-      TweenMax.to(this._container, 0.5, {
-        y: 0
-      })
+  _hideMessage () {
+    this._animateContainer({y: 100, delay: 3})
+  }
+
+  _animateContainer (animationProps) {
+    const container = this._container
+    if (container) {
+      TweenMax.to(container, 0.5, animationProps)
     }
   }
 
+  componentDidMount () {
+    this._animateContainer({y: 0})
+  }
+
   componentDidUpdate () {
-    const el = this._container
-    TweenMax.fromTo(el, 0.5, {
+    const container = this._container
+    if (container) {}
+    TweenMax.fromTo(container, 0.5, {
       y: 100
     }, {
       y: 0,
       onComplete: this._hideMessage
-    })
-  }
-
-  _hideMessage () {
-    const el = this._container
-    TweenMax.to(el, 0.5, {
-      y: 100,
-      delay: 3
     })
   }
 

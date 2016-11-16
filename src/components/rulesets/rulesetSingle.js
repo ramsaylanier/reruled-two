@@ -18,7 +18,6 @@ const RulesetSingle = (props) => {
 
   const sortRulesByType = (rules) => {
     return _.groupBy(rules, (rule) => {
-      console.log(rule)
       return rule.type
     })
   }
@@ -28,15 +27,15 @@ const RulesetSingle = (props) => {
       <div>Loading...</div>
     )
   } else {
-    const {game, rules} = ruleset
+    const {game, rules, author} = ruleset
     const canEdit = user.id === ruleset.author.id
-    const rulesByType = sortRulesByType(rules)
-    console.log(rulesByType)
+    const rulesByType = rules.length > 0 && sortRulesByType(rules)
     return (
       <Page>
         <PageHeader type="tertiary">
           <Link styleName="game" to={`/games/${game.title}`}>{game.title}</Link>
           <h1 styleName="title">{ruleset.name}</h1>
+          <p>{author.id}</p>
 
           {canEdit &&
             <DrawerToggleButton drawerContent={<NewRuleForm rulesetid={ruleset.id}/>}/>
@@ -45,40 +44,20 @@ const RulesetSingle = (props) => {
 
         <PageContent>
           <h3>Rules</h3>
-          {rules &&
+          {rulesByType &&
             <div>
-              <List type="no-style">
-                {rulesByType.setup.map(rule => {
-                  console.log(rule)
-                  return (
-                    <RuleItem key={rule.id} {...rule}/>
-                  )
-                })}
-              </List>
-              <List type="no-style">
-                {rulesByType.play.map(rule => {
-                  console.log(rule)
-                  return (
-                    <RuleItem key={rule.id} {...rule}/>
-                  )
-                })}
-              </List>
-              <List type="no-style">
-                {rulesByType.misc.map(rule => {
-                  console.log(rule)
-                  return (
-                    <RuleItem key={rule.id} {...rule}/>
-                  )
-                })}
-              </List>
-              <List type="no-style">
-                {rulesByType.endgame.map(rule => {
-                  console.log(rule)
-                  return (
-                    <RuleItem key={rule.id} {...rule}/>
-                  )
-                })}
-              </List>
+              {_.map(rulesByType, (rules, index) => {
+                return (
+                  <List type="no-style" key={index}>
+                    <h3>{index}</h3>
+                    {rules.map(rule => {
+                      return (
+                        <RuleItem key={rule.id} {...rule}/>
+                      )
+                    })}
+                  </List>
+                )
+              })}
             </div>
           }
         </PageContent>
@@ -100,6 +79,7 @@ const rulesetQuery = gql`
         username
       }
       rules{
+        id
         type
         description
       }

@@ -16,14 +16,14 @@ class Input extends React.Component {
   }
 
   render () {
-    const {type = 'text'} = this.props
+    const {styles, type = 'text', ...rest} = this.props
     return (
       <input
         styleName={`base ${type}`}
         type={type}
         value={this.state.value}
         onChange={this.handleChange}
-        {...this.props}
+        {...rest}
       />
     )
   }
