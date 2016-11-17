@@ -52,11 +52,12 @@ const QueryReolvers = {
       return getSource(hits)
     })
   },
-  user (root, {username}) {
+  user (root, {username, loggedIn}) {
     return UserDatabase.findUserByUsername(username).then(res => {
       const user = {
         id: res._id,
-        username: res._source.username
+        username: res._source.username,
+        email: loggedIn ? res._source.email : null
       }
       return user
     })
