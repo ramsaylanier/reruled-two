@@ -29,7 +29,7 @@ export default `
 
   type Query {
     games(title: String): [Game]
-    user(username: String): User
+    user(username: String, loggedIn: Boolean): User
     ruleset(id: String): Ruleset
     rulesets(game: String): [Ruleset]
     rule(id: String): Rule
