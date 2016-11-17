@@ -5,6 +5,7 @@ export const CLOSE_NAV = 'CLOSE_NAV'
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
 export const SET_CURRENT_GAME = 'SET_CURRENT_GAME'
 export const THROW_NOTIFICATION = 'THROW_NOTIFICATION'
+export const ADD_GAME_TO_HISTORY = 'ADD_GAME_TO_HISTORY'
 
 export function login (user) {
   return {
@@ -51,5 +52,13 @@ export function throwNotification ({message, messageType}) {
     type: THROW_NOTIFICATION,
     message: message,
     messageType: messageType
+  }
+}
+
+export function addGameToHistory (game, user) {
+  return {
+    type: ADD_GAME_TO_HISTORY,
+    game: game,
+    user: user
   }
 }

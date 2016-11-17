@@ -9,6 +9,7 @@ import styles from './game.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
+import {addGameToHistory} from 'state/actions/actions'
 
 const GameSingle = (props) => {
   const {user, data} = props
@@ -57,6 +58,14 @@ const GameSingleWithData = graphql(rulesetQuery, {
   }
 })(GameSingle)
 
+function mapDisatchToProps (dispatch) {
+  return {
+    addGameToHistory: (game, user) => {
+      dispatch(addGameToHistory(game, user))
+    }
+  }
+}
+
 function mapStateToProps (state) {
   return {
     user: state.user,
@@ -64,4 +73,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(CSSModules(GameSingleWithData, styles))
+export default connect(mapStateToProps, mapDisatchToProps)(CSSModules(GameSingleWithData, styles))

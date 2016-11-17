@@ -3,6 +3,7 @@ export default `
     id: String
     username: String
     email: String
+    history: [Game]
   }
 
   type Game {
