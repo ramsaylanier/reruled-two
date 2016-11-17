@@ -12,14 +12,17 @@ import {client, store} from './apollo'
 import { syncHistoryWithStore } from 'react-router-redux'
 import authApi from './auth/api'
 
-function checkForUserSession (nextState, replace, callback) {
+function onLayoutEnter (nextState, replace, callback) {
+  checkForUserSession()
+  callback()
+}
+
+function checkForUserSession () {
   return authApi.checkSession().then(res => {
     if (res.data.loggedIn) {
       const user = res.data.user
       store.dispatch({type: 'LOG_IN', user: user})
     }
-
-    callback()
   })
 }
 
@@ -52,7 +55,7 @@ const App = (props) => {
     <ApolloProvider client={client} store={store}>
       <Router history={history}>
         <Route path="logout" onEnter={logOut}/>
-        <Route path="/" component={Layout} onEnter={checkForUserSession}>
+        <Route path="/" component={Layout} onEnter={onLayoutEnter}>
           <IndexRoute component={Homepage}/>
           <Route path="login" component={Login}/>
           <Route path="register" component={Register}/>
