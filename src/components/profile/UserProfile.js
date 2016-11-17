@@ -1,5 +1,7 @@
 import React from 'react'
 import {graphql} from 'react-apollo'
+import CSSModules from 'react-css-modules'
+import styles from './profile.scss'
 import gql from 'graphql-tag'
 import {connect} from 'react-redux'
 import {Page, PageContent} from 'components/layout/pages'
@@ -12,7 +14,7 @@ const UserProfile = (props) => {
   function showUserEmail ({email}) {
     if (email) {
       return (
-        <div className="profile-item">
+        <div styleName="profile-item">
           <label>
             e-mail
           </label>
@@ -31,7 +33,7 @@ const UserProfile = (props) => {
       <Page>
         <PageContent>
           <UserAvatar/>
-          <div className="profile-item">
+          <div styleName="profile-item">
             <label>
               username
             </label>
@@ -54,6 +56,8 @@ const GetUser = gql`
   }
 `
 
+const UserProfileWithStyles = CSSModules(UserProfile, styles)
+
 const UserProfileWithUser = graphql(GetUser, {
   options: (props) => ({
     variables: {
@@ -61,7 +65,7 @@ const UserProfileWithUser = graphql(GetUser, {
       loggedIn: true
     }
   })
-})(UserProfile)
+})(UserProfileWithStyles)
 
 function mapStateToProps (state) {
   return {
