@@ -6,6 +6,8 @@ import gql from 'graphql-tag'
 import {connect} from 'react-redux'
 import {Page, PageContent} from 'components/layout/pages'
 import UserAvatar from 'components/profile/userAvatar'
+import {FormControl, Label} from 'components/form/form'
+import Input from 'components/form/input/input'
 
 const UserProfile = (props) => {
   const {data} = props
@@ -14,12 +16,10 @@ const UserProfile = (props) => {
   function showUserEmail ({email}) {
     if (email) {
       return (
-        <div styleName="profile-item">
-          <label>
-            e-mail
-          </label>
-          <input value={email} disabled="disabled"></input>
-        </div>
+        <FormControl>
+          <Label type="block">Email</Label>
+          <Input type="text" value={email} disabled="disabled"/>
+        </FormControl>
       )
     }
     return
@@ -33,12 +33,10 @@ const UserProfile = (props) => {
       <Page>
         <PageContent>
           <UserAvatar/>
-          <div styleName="profile-item">
-            <label>
-              username
-            </label>
-            <input value={username} disabled="disabled"></input>
-          </div>
+          <FormControl>
+            <Label type="block">Username</Label>
+            <Input type="text" value={username} disabled="disabled"/>
+          </FormControl>
           {showUserEmail(user)}
         </PageContent>
       </Page>
@@ -47,8 +45,8 @@ const UserProfile = (props) => {
 }
 
 const GetUser = gql`
-  query getUser($username: String, $loggedIn: Boolean){
-    user(username: $username, loggedIn: $loggedIn){
+  query getUser($username: String, $currentUser: String){
+    user(username: $username, currentUser: $currentUser){
       id
       username
       email
@@ -62,7 +60,7 @@ const UserProfileWithUser = graphql(GetUser, {
   options: (props) => ({
     variables: {
       username: props.params.username,
-      loggedIn: true
+      currentUser: props.user.username
     }
   })
 })(UserProfileWithStyles)
