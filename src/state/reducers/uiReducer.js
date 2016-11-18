@@ -26,7 +26,6 @@ export default function uiReducer (state = initialUIState, action) {
         }
       })
     case LOCATION_CHANGE:
-      console.log('ui location change')
       return Object.assign({}, state, {
         drawerOpen: false,
         navOpen: false
