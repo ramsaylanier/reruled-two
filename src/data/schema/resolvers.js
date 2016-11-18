@@ -125,7 +125,8 @@ const RuleResolver = {
     return UserDatabase.findUserByUsername(root.author.username).then(res => {
       const user = {
         id: res._id,
-        username: res._source.username
+        username: res._source.username,
+        email: res._source.email
       }
       return user
     }).catch(err => {

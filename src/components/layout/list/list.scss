@@ -14,4 +14,10 @@
   &:not(:last-of-type){
     margin-bottom: .5rem;
   }
+
+  a{
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
 }

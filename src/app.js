@@ -45,7 +45,6 @@ function setCurrentGame (nextState, replace, callback) {
     type: 'SET_CURRENT_GAME',
     currentGame: nextState.params.title
   })
-
   callback()
 }
 
