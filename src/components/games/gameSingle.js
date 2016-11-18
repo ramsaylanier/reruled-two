@@ -13,13 +13,14 @@ import {addGameToHistory} from 'state/actions/actions'
 import update from 'react-addons-update'
 
 const rulesetSubscription = gql`
-  subscription onRulesetsAdded($game: String){
+  subscription onRulesetsAdded($game: String!){
     rulesetAdded(game: $game){
       id
       name
     }
   }
 `
+
 class GameSingle extends React.Component {
 
   constructor (props) {
@@ -28,11 +29,10 @@ class GameSingle extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     if (!this.subscription && !nextProps.loading) {
       this.subscription = this.props.subscribeToMore({
         document: rulesetSubscription,
-        variables: { game: this.props.params.title },
+        variables: { game: nextProps.params.title },
         updateQuery: (previousResult, { subscriptionData }) => {
           const newRuleset = subscriptionData.data.rulesetAdded
           const newResult = update(previousResult, {
@@ -63,7 +63,7 @@ class GameSingle extends React.Component {
             <List type="no-style">
               {rulesets.map(ruleset => {
                 return (
-                  <ListItem>
+                  <ListItem key={ruleset.id}>
                     <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
                   </ListItem>
                 )
@@ -77,7 +77,7 @@ class GameSingle extends React.Component {
 }
 
 const rulesetQuery = gql`
-  query getRulesetsForGame($game: String){
+  query getRulesetsForGame($game: String!){
     rulesets(game: $game){
       id
       name

@@ -16,6 +16,7 @@ import {subscriptionManager} from './src/data/subscriptions'
 import graphQLSchema from './src/data/schema/schema'
 import passport from './src/auth/config'
 import authRoutes from './src/auth/routes'
+import Database from './src/data/db'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
@@ -35,15 +36,18 @@ new SubscriptionServer (
   {
     subscriptionManager,
     onSubscribe: (msg, params) => {
-      console.log('subscription params:', params)
+      return params
     }
   },
   websocketServer
 )
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({
-  schema: graphQLSchema
+app.use('/graphql', bodyParser.json(), graphqlExpress(req => {
+  return {
+    schema: graphQLSchema
+  }
 }))
+
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))

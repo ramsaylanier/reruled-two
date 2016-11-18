@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
-import ApolloClient, {createNetworkInterface} from 'apollo-client'
+import ApolloClient, {createNetworkInterface, addTypename} from 'apollo-client'
 import { routerReducer } from 'react-router-redux'
 import { Client } from 'subscriptions-transport-ws'
 import userReducer from './state/reducers/userReducer'
@@ -15,7 +15,6 @@ const networkInterface = createNetworkInterface({
 
 const addGraphQLSubscriptions = (networkInterface, wsClient) => Object.assign(networkInterface, {
   subscribe: (request, handler) => {
-    console.log('request:', request)
     wsClient.subscribe({
       query: print(request.query),
       variables: request.variables
@@ -32,7 +31,14 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 )
 
 export const client = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions
+  networkInterface: networkInterfaceWithSubscriptions,
+  queryTransformer: addTypename,
+  dataIdFromObject: (result) => {
+    if (result.id && result.__typename) {
+      return result.__typename + result.id
+    }
+    return null
+  }
 })
 
 export const store = createStore(

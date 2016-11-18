@@ -84,25 +84,25 @@ const NewRulesetFormWithMutation = graphql(createRulesetMutation, {
         return mutate({
           variables: {
             ruleset: ruleset
+          },
+          updateQueries: {
+            getRulesetsForGame: (prev, { mutationResult }) => {
+              const newRuleset = mutationResult.data.createRuleset
+              if (prev.rulesets) {
+                return update(prev, {
+                  rulesets: {
+                    $unshift: [newRuleset]
+                  }
+                })
+              } else {
+                return update(prev, {
+                  rulesets: {
+                    $set: [newRuleset]
+                  }
+                })
+              }
+            }
           }
-          // updateQueries: {
-          //   getRulesetsForGame: (prev, { mutationResult }) => {
-          //     const newRuleset = mutationResult.data.createRuleset
-          //     if (prev.rulesets) {
-          //       return update(prev, {
-          //         rulesets: {
-          //           $unshift: [newRuleset]
-          //         }
-          //       })
-          //     } else {
-          //       return update(prev, {
-          //         rulesets: {
-          //           $set: [newRuleset]
-          //         }
-          //       })
-          //     }
-          //   }
-          // }
         })
       }
     }

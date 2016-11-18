@@ -28,11 +28,13 @@ const MutationResolvers = {
       }
     })
   },
-  createRuleset (root, ruleset) {
+  createRuleset (root, ruleset, context) {
     return RulesetDatabase.createRuleset(ruleset).then(res => {
       const newRulesetId = res._id
       return RulesetDatabase.getRuleset(newRulesetId).then(ruleset => {
         const newRuleset = RulesetDatabase.shapeRuleset(ruleset)
+        console.log('context: ', context)
+        console.log('new ruleset 2: ', newRuleset)
         pubsub.publish('rulesetAdded', newRuleset)
         return newRuleset
       })
@@ -140,7 +142,7 @@ const RuleResolver = {
 
 const SubscriptionResolvers = {
   rulesetAdded (ruleset) {
-    console.log('rulesetAdded')
+    console.log('rulesetAdded:', ruleset)
     return ruleset
   }
 }
