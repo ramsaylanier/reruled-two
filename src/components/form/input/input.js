@@ -16,6 +16,7 @@ class Input extends React.Component {
   }
 
   render () {
+    // eslint-disable-next-line
     const {styles, type = 'text', ...rest} = this.props
     return (
       <input

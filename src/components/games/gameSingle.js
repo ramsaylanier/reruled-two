@@ -10,33 +10,70 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import {addGameToHistory} from 'state/actions/actions'
+import update from 'react-addons-update'
 
-const GameSingle = (props) => {
-  const {user, data} = props
-  const {rulesets} = data
-  return (
-    <Page>
-      <PageHeader type="primary">
-        <h1>{props.params.title}</h1>
-        {user.id &&
-          <DrawerToggleButton drawerContent={<NewRulesetForm/>}/>
-        }
-      </PageHeader>
-      <PageContent>
-        {rulesets &&
-          <List type="no-style">
-            {rulesets.map(ruleset => {
-              return (
-                <ListItem>
-                  <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
-                </ListItem>
-              )
-            })}
-          </List>
-        }
-      </PageContent>
-    </Page>
-  )
+const rulesetSubscription = gql`
+  subscription onRulesetsAdded($game: String){
+    rulesetAdded(game: $game){
+      id
+      name
+    }
+  }
+`
+class GameSingle extends React.Component {
+
+  constructor (props) {
+    super(props)
+    this.subscription = null
+  }
+
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
+    if (!this.subscription && !nextProps.loading) {
+      this.subscription = this.props.subscribeToMore({
+        document: rulesetSubscription,
+        variables: { game: this.props.params.title },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const newRuleset = subscriptionData.data.rulesetAdded
+          const newResult = update(previousResult, {
+            rulesets: {
+              $unshift: [newRuleset]
+            }
+          })
+          return newResult
+        },
+        onError: (err) => console.log(err)
+      })
+    }
+  }
+
+  render () {
+    const {user, params, rulesets} = this.props
+    const {title} = params
+    return (
+      <Page>
+        <PageHeader type="primary">
+          <h1>{title}</h1>
+          {user.id &&
+            <DrawerToggleButton drawerContent={<NewRulesetForm/>}/>
+          }
+        </PageHeader>
+        <PageContent>
+          {rulesets &&
+            <List type="no-style">
+              {rulesets.map(ruleset => {
+                return (
+                  <ListItem>
+                    <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
+                  </ListItem>
+                )
+              })}
+            </List>
+          }
+        </PageContent>
+      </Page>
+    )
+  }
 }
 
 const rulesetQuery = gql`
@@ -48,6 +85,7 @@ const rulesetQuery = gql`
   }
 `
 
+const GameSingleWithStyle = CSSModules(GameSingle, styles)
 const GameSingleWithData = graphql(rulesetQuery, {
   options: (props) => {
     return ({
@@ -55,8 +93,11 @@ const GameSingleWithData = graphql(rulesetQuery, {
         game: props.params.title
       }
     })
-  }
-})(GameSingle)
+  },
+  props: ({ data: { loading, rulesets, subscribeToMore } }) => ({
+    loading, rulesets, subscribeToMore
+  })
+})(GameSingleWithStyle)
 
 function mapDisatchToProps (dispatch) {
   return {
@@ -73,4 +114,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, mapDisatchToProps)(CSSModules(GameSingleWithData, styles))
+export default connect(mapStateToProps, mapDisatchToProps)(GameSingleWithData)

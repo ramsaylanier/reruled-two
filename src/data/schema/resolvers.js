@@ -4,6 +4,7 @@ import GameDatabase from '../db/games'
 import UserDatabase from '../db/users'
 import RulesetDatabase from '../db/rulesets'
 import RuleDatabase from '../db/rules'
+import {pubsub} from '../subscriptions'
 
 // get the source of each elasticsearch hit
 function getSource (results) {
@@ -31,7 +32,9 @@ const MutationResolvers = {
     return RulesetDatabase.createRuleset(ruleset).then(res => {
       const newRulesetId = res._id
       return RulesetDatabase.getRuleset(newRulesetId).then(ruleset => {
-        return RulesetDatabase.shapeRuleset(ruleset)
+        const newRuleset = RulesetDatabase.shapeRuleset(ruleset)
+        pubsub.publish('rulesetAdded', newRuleset)
+        return newRuleset
       })
     })
   },
@@ -135,11 +138,19 @@ const RuleResolver = {
   }
 }
 
+const SubscriptionResolvers = {
+  rulesetAdded (ruleset) {
+    console.log('rulesetAdded')
+    return ruleset
+  }
+}
+
 const resolvers = {
   Query: QueryReolvers,
   Ruleset: RulesetResolvers,
   Rule: RuleResolver,
-  Mutation: MutationResolvers
+  Mutation: MutationResolvers,
+  Subscription: SubscriptionResolvers
 }
 
 export default resolvers

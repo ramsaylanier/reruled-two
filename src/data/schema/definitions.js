@@ -66,8 +66,13 @@ export default `
     createRule(rule: RuleInput!): Rule
   }
 
+  type Subscription {
+    rulesetAdded(game: String!): Ruleset
+  }
+
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `

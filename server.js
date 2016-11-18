@@ -10,13 +10,36 @@ import sessionstore from 'sessionstore'
 import bodyParser from 'body-parser'
 import {loadUsersFromTestData, loadGamesFromExternalSource} from './utils/utils'
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
+import {SubscriptionServer} from 'subscriptions-transport-ws'
+import {createServer} from 'http'
+import {subscriptionManager} from './src/data/subscriptions'
 import graphQLSchema from './src/data/schema/schema'
 import passport from './src/auth/config'
 import authRoutes from './src/auth/routes'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const port = isDev ? 3000 : process.env.PORT
+const wsPort = 8080
 const app = express()
+const websocketServer = createServer((request, response) => {
+  response.writeHead(404)
+  response.end()
+})
+
+websocketServer.listen(wsPort, () => console.log( // eslint-disable-line no-console
+  `Websocket Server is now running on http://localhost:${wsPort}`
+))
+
+// eslint-disable-next-line
+new SubscriptionServer (
+  {
+    subscriptionManager,
+    onSubscribe: (msg, params) => {
+      console.log('subscription params:', params)
+    }
+  },
+  websocketServer
+)
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({
   schema: graphQLSchema
