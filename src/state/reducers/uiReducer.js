@@ -1,4 +1,5 @@
 import { OPEN_NAV, CLOSE_NAV, TOGGLE_DRAWER, THROW_NOTIFICATION } from '../actions/actions'
+import { LOCATION_CHANGE } from 'react-router-redux'
 
 let initialUIState = {
   navOpen: false,
@@ -23,6 +24,11 @@ export default function uiReducer (state = initialUIState, action) {
           message: action.message,
           messageType: action.messageType
         }
+      })
+    case LOCATION_CHANGE:
+      return Object.assign({}, state, {
+        drawerOpen: false,
+        navOpen: false
       })
     default:
       return state

@@ -54,7 +54,6 @@ const QueryReolvers = {
   },
   user (root, {username, currentUser}) {
     return UserDatabase.findUserByUsername(username).then(res => {
-      console.log(username, currentUser)
       const userIsCurrentUser = username === currentUser
       const user = {
         id: res._id,
