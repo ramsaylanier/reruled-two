@@ -9,6 +9,7 @@ import styles from './rulesets.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {throwNotification, toggleDrawer} from 'state/actions/actions'
+import {isDuplicateRuleset} from './helpers'
 
 class NewRulesetForm extends React.Component {
 
@@ -88,18 +89,22 @@ const NewRulesetFormWithMutation = graphql(createRulesetMutation, {
           updateQueries: {
             getRulesetsForGame: (prev, { mutationResult }) => {
               const newRuleset = mutationResult.data.createRuleset
-              if (prev.rulesets) {
-                return update(prev, {
-                  rulesets: {
-                    $unshift: [newRuleset]
-                  }
-                })
+              if (isDuplicateRuleset(newRuleset, prev.rulesets)) {
+                return prev
               } else {
-                return update(prev, {
-                  rulesets: {
-                    $set: [newRuleset]
-                  }
-                })
+                if (prev.rulesets) {
+                  return update(prev, {
+                    rulesets: {
+                      $unshift: [newRuleset]
+                    }
+                  })
+                } else {
+                  return update(prev, {
+                    rulesets: {
+                      $set: [newRuleset]
+                    }
+                  })
+                }
               }
             }
           }

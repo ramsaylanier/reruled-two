@@ -11,6 +11,7 @@ import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import {addGameToHistory} from 'state/actions/actions'
 import update from 'react-addons-update'
+import {isDuplicateRuleset} from 'components/rulesets/helpers'
 
 const rulesetSubscription = gql`
   subscription onRulesetsAdded($game: String!){
@@ -35,12 +36,25 @@ class GameSingle extends React.Component {
         variables: { game: nextProps.params.title },
         updateQuery: (previousResult, { subscriptionData }) => {
           const newRuleset = subscriptionData.data.rulesetAdded
-          const newResult = update(previousResult, {
-            rulesets: {
-              $unshift: [newRuleset]
+          let newResult
+          if (isDuplicateRuleset(newRuleset, previousResult.rulesets)) {
+            return previousResult
+          } else {
+            if (previousResult.rulesets) {
+              newResult = update(previousResult, {
+                rulesets: {
+                  $unshift: [newRuleset]
+                }
+              })
+            } else {
+              newResult = update(previousResult, {
+                rulesets: {
+                  $set: [newRuleset]
+                }
+              })
             }
-          })
-          return newResult
+            return newResult
+          }
         },
         onError: (err) => console.log(err)
       })
