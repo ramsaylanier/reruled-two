@@ -4,14 +4,14 @@ import DrawerToggleButton from 'components/buttons/drawerToggleButton'
 import NewRulesetForm from 'components/rulesets/newRulesetForm'
 import {List, ListItem} from 'components/layout/list'
 import {Link} from 'react-router'
-import CSSModules from 'react-css-modules'
-import styles from './game.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import {addGameToHistory} from 'state/actions/actions'
 import update from 'react-addons-update'
 import {isDuplicateRuleset} from 'components/rulesets/helpers'
+import CSSModules from 'react-css-modules'
+import styles from 'components/games/game.scss'
 
 const rulesetSubscription = gql`
   subscription onRulesetsAdded($game: String!){
@@ -22,7 +22,8 @@ const rulesetSubscription = gql`
   }
 `
 
-class GameSingle extends React.Component {
+@CSSModules(styles)
+class Game extends React.Component {
 
   constructor (props) {
     super(props)
@@ -99,8 +100,7 @@ const rulesetQuery = gql`
   }
 `
 
-const GameSingleWithStyle = CSSModules(GameSingle, styles)
-const GameSingleWithData = graphql(rulesetQuery, {
+const GameWithData = graphql(rulesetQuery, {
   options: (props) => {
     return ({
       variables: {
@@ -111,7 +111,7 @@ const GameSingleWithData = graphql(rulesetQuery, {
   props: ({ data: { loading, rulesets, subscribeToMore } }) => ({
     loading, rulesets, subscribeToMore
   })
-})(GameSingleWithStyle)
+})(Game)
 
 function mapDisatchToProps (dispatch) {
   return {
@@ -128,4 +128,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, mapDisatchToProps)(GameSingleWithData)
+export default connect(mapStateToProps, mapDisatchToProps)(GameWithData)
