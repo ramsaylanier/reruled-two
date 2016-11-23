@@ -2,17 +2,28 @@ import React from 'react'
 import GameSearch from 'components/games/search/searchField'
 import {Page, PageContent} from 'components/layout/pages'
 import GameHistory from 'components/history/gameHistory'
+import {connect} from 'react-redux'
 
-const Homepage = (props) => {
-  return (
-    <Page>
-      <PageContent>
-        <GameSearch/>
-        <p>Recent History</p>
-        <GameHistory/>
-      </PageContent>
-    </Page>
-  )
+function mapStateToProps (state) {
+  return {
+    history: state.user.history
+  }
+}
+
+@connect(mapStateToProps)
+class Homepage extends React.Component {
+  render () {
+    const {history} = this.props
+    return (
+      <Page>
+        <PageContent>
+          <GameSearch/>
+          <p>Recent History</p>
+          <GameHistory history={history}/>
+        </PageContent>
+      </Page>
+    )
+  }
 }
 
 export default Homepage

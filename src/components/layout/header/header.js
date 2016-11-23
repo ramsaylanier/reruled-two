@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import MenuToggle from '../menu/menuToggle'
+import MenuToggle from 'components/menu/menuToggle'
 import CSSModules from 'react-css-modules'
 import styles from './header.scss'
 import BackIcon from 'components/icons/backIcon'
@@ -27,9 +27,13 @@ const Header = (props) => {
   )
 }
 
+Header.propTypes = {
+  drawerOpen: PropTypes.bool.isRequired,
+  navOpen: PropTypes.bool.isRequired
+}
+
 function mapStateToProps (state) {
   return {
-    user: state.user,
     drawerOpen: state.ui.drawerOpen,
     navOpen: state.ui.navOpen
   }

@@ -16,6 +16,7 @@ class Textarea extends React.Component {
   }
 
   render () {
+    // eslint-disable-next-line no-unused-vars
     const {type = 'text', styles, ...rest} = this.props
     return (
       <textarea

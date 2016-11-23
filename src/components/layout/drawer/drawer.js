@@ -1,10 +1,23 @@
-import React from 'react'
+import React, {PropTypes, Component} from 'react'
 import CSSModules from 'react-css-modules'
 import {connect} from 'react-redux'
 import styles from './drawer.scss'
 import TweenMax from 'gsap'
 
-class Drawer extends React.Component {
+function mapStateToProps (state) {
+  return {
+    ui: state.ui
+  }
+}
+
+@connect(mapStateToProps)
+@CSSModules(styles, {allowMultiple: true})
+class Drawer extends Component {
+
+  static propTypes = {
+    ui: PropTypes.object.isRequired
+  }
+
   componentWillReceiveProps (nextProps) {
     let dX = '0%'
     if (nextProps.ui.drawerOpen) {
@@ -12,7 +25,7 @@ class Drawer extends React.Component {
     }
     TweenMax.to(this._drawer, 0.75, {
       x: dX,
-      ease: Power4.easeOut
+      ease: Power4.easeOut // eslint-disable-line no-undef
     })
   }
 
@@ -26,11 +39,4 @@ class Drawer extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    ui: state.ui
-  }
-}
-
-export default connect(mapStateToProps)(CSSModules(Drawer, styles, {allowMultiple: true}))
+export default Drawer

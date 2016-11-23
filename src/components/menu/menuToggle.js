@@ -4,19 +4,6 @@ import styles from './menus.scss'
 import {connect} from 'react-redux'
 import {CLOSE_NAV, OPEN_NAV} from '../../state/actions/actions'
 
-class MenuToggle extends React.Component {
-  render () {
-    const isNavOpen = this.props.ui.navOpen
-    return (
-      <div onClick={(e) => this.props.toggleMainNav(isNavOpen)}>
-        <div styleName="bar"></div>
-        <div styleName="bar"></div>
-        <div styleName="bar"></div>
-      </div>
-    )
-  }
-}
-
 function mapDispatchToProps (dispatch) {
   return {
     toggleMainNav: (isOpen) => {
@@ -35,4 +22,19 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(MenuToggle, styles))
+@connect(mapStateToProps, mapDispatchToProps)
+@CSSModules(styles)
+class MenuToggle extends React.Component {
+  render () {
+    const isNavOpen = this.props.ui.navOpen
+    return (
+      <div onClick={(e) => this.props.toggleMainNav(isNavOpen)}>
+        <div styleName="bar"></div>
+        <div styleName="bar"></div>
+        <div styleName="bar"></div>
+      </div>
+    )
+  }
+}
+
+export default MenuToggle

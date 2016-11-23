@@ -13,6 +13,21 @@ import {isDuplicateRuleset} from 'components/rulesets/helpers'
 import CSSModules from 'react-css-modules'
 import styles from 'components/games/game.scss'
 
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    apollo: state.apollo
+  }
+}
+
+function mapDisatchToProps (dispatch) {
+  return {
+    addGameToHistory: (game, user) => {
+      dispatch(addGameToHistory(game, user))
+    }
+  }
+}
+
 const rulesetSubscription = gql`
   subscription onRulesetsAdded($game: String!){
     rulesetAdded(game: $game){
@@ -22,6 +37,28 @@ const rulesetSubscription = gql`
   }
 `
 
+const rulesetQuery = gql`
+  query getRulesetsForGame($game: String!){
+    rulesets(game: $game){
+      id
+      name
+    }
+  }
+`
+
+@connect(mapStateToProps, mapDisatchToProps)
+@graphql(rulesetQuery, {
+  options: (props) => {
+    return ({
+      variables: {
+        game: props.params.title
+      }
+    })
+  },
+  props: ({ data: { loading, rulesets, subscribeToMore } }) => ({
+    loading, rulesets, subscribeToMore
+  })
+})
 @CSSModules(styles)
 class Game extends React.Component {
 
@@ -91,41 +128,4 @@ class Game extends React.Component {
   }
 }
 
-const rulesetQuery = gql`
-  query getRulesetsForGame($game: String!){
-    rulesets(game: $game){
-      id
-      name
-    }
-  }
-`
-
-const GameWithData = graphql(rulesetQuery, {
-  options: (props) => {
-    return ({
-      variables: {
-        game: props.params.title
-      }
-    })
-  },
-  props: ({ data: { loading, rulesets, subscribeToMore } }) => ({
-    loading, rulesets, subscribeToMore
-  })
-})(Game)
-
-function mapDisatchToProps (dispatch) {
-  return {
-    addGameToHistory: (game, user) => {
-      dispatch(addGameToHistory(game, user))
-    }
-  }
-}
-
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    apollo: state.apollo
-  }
-}
-
-export default connect(mapStateToProps, mapDisatchToProps)(GameWithData)
+export default Game

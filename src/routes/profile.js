@@ -37,7 +37,7 @@ function mapStateToProps (state) {
 @CSSModules(styles)
 class UserProfile extends React.Component {
 
-  _showUerEmail ({email}) {
+  _showUserEmail ({email}) {
     if (email) {
       return (
         <FormControl>

@@ -5,6 +5,25 @@ import SearchResults from './searchResults'
 import CSSModules from 'react-css-modules'
 import styles from './search.scss'
 import Wrapper from 'components/layout/wrapper/wrapper'
+
+const GameQuery = gql`
+  query GetGames($title: String){
+    games(title: $title){
+      title
+    }
+  }
+`
+
+@graphql(GameQuery, {
+  options: (props) => {
+    return ({
+      variables: {
+        title: props.title
+      }
+    })
+  }
+})
+@CSSModules(styles)
 class SearchField extends React.Component {
   constructor () {
     super()
@@ -35,23 +54,4 @@ class SearchField extends React.Component {
   }
 }
 
-const GameQuery = gql`
-  query GetGames($title: String){
-    games(title: $title){
-      title
-    }
-  }
-`
-
-const SearchFieldWithStyles = CSSModules(SearchField, styles)
-const SearchFieldWithData = graphql(GameQuery, {
-  options: (props) => {
-    return ({
-      variables: {
-        title: props.title
-      }
-    })
-  }
-})(SearchFieldWithStyles)
-
-export default SearchFieldWithData
+export default SearchField

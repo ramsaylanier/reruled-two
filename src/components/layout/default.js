@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from 'components/header/header'
+import Header from 'components/layout/header/header'
 import Drawer from 'components/layout/drawer/drawer'
 import MainNav from 'components/menu/mainNav'
 import Notification from 'components/notification/notification'

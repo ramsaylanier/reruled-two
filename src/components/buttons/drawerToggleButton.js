@@ -5,6 +5,28 @@ import {connect} from 'react-redux'
 import {TOGGLE_DRAWER} from 'state/actions/actions'
 import {TweenMax, Power4} from 'gsap'
 
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    drawerOpen: state.ui.drawerOpen
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    toggleDrawer: (drawerContent, drawerOpen) => {
+      const shouldDrawerBeOpen = !drawerOpen
+      dispatch({
+        type: TOGGLE_DRAWER,
+        isOpen: shouldDrawerBeOpen,
+        content: drawerContent
+      })
+    }
+  }
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
+@CSSModules(styles)
 class drawerToggleButton extends React.Component {
 
   componentWillReceiveProps (nextProps) {
@@ -30,24 +52,4 @@ class drawerToggleButton extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    drawerOpen: state.ui.drawerOpen
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    toggleDrawer: (drawerContent, drawerOpen) => {
-      const shouldDrawerBeOpen = !drawerOpen
-      dispatch({
-        type: TOGGLE_DRAWER,
-        isOpen: shouldDrawerBeOpen,
-        content: drawerContent
-      })
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(drawerToggleButton, styles))
+export default drawerToggleButton
