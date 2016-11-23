@@ -1,9 +1,7 @@
 import React from 'react'
-import CSSModules from 'react-css-modules'
-import GameSearch from '../../games/search/searchField'
-import {Page, PageContent} from './'
+import GameSearch from 'components/games/search/searchField'
+import {Page, PageContent} from 'components/layout/pages'
 import GameHistory from 'components/history/gameHistory'
-import styles from './page.scss'
 
 const Homepage = (props) => {
   return (
@@ -17,4 +15,4 @@ const Homepage = (props) => {
   )
 }
 
-export default CSSModules(Homepage, styles)
+export default Homepage
