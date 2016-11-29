@@ -8,6 +8,8 @@ import {Link} from 'react-router'
 import CSSModules from 'react-css-modules'
 import styles from 'components/rulesets/rulesets.scss'
 import gql from 'graphql-tag'
+import update from 'react-addons-update'
+import {isDuplicateRuleset} from 'components/rulesets/helpers'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import {groupBy, map} from 'lodash'
@@ -17,6 +19,16 @@ function mapStateToProps (state) {
     user: state.user
   }
 }
+
+const ruleSubscription = gql`
+  subscription onRuleAdded($rulesetId: String!){
+    ruleAdded(rulesetId: $rulesetId){
+      id
+      type
+      description
+    }
+  }
+`
 
 const rulesetQuery = gql`
   query getRuleset($id: String){
@@ -47,15 +59,59 @@ const rulesetQuery = gql`
         id: props.params.id
       }
     })
-  }
+  },
+  props: ({ data: { loading, ruleset, subscribeToMore } }) => ({
+    loading, ruleset, subscribeToMore
+  })
 })
 @CSSModules(styles)
 
 class Ruleset extends React.Component {
-  render () {
-    const {user, data} = this.props
-    const {ruleset, loading} = data
 
+  constructor () {
+    super()
+    this.subscription = null
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!this.subscription && !nextProps.loading) {
+      this.subscription = this.props.subscribeToMore({
+        document: ruleSubscription,
+        variables: { rulesetId: nextProps.params.id },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const newRule = subscriptionData.data.ruleAdded
+          let newResult
+          if (isDuplicateRuleset(newRule, previousResult.ruleset.rules)) {
+            return previousResult
+          } else {
+            if (previousResult.ruleset.rules) {
+              newResult = update(previousResult, {
+                ruleset: {
+                  rules: {
+                    $unshift: [newRule]
+                  }
+                }
+              })
+            } else {
+              newResult = update(previousResult, {
+                ruleset: {
+                  rules: {
+                    $set: [newRule]
+                  }
+                }
+              })
+            }
+            return newResult
+          }
+        },
+        onError: (err) => console.log(err)
+      })
+    }
+  }
+
+  render () {
+    console.log('ruleset: ', this.props)
+    const {user, ruleset, loading} = this.props
     const sortRulesByType = (rules) => {
       return groupBy(rules, (rule) => {
         return rule.type
@@ -69,7 +125,7 @@ class Ruleset extends React.Component {
     } else {
       const {game, rules, author} = ruleset
       const canEdit = user.id === ruleset.author.id
-      const rulesByType = rules.length > 0 && sortRulesByType(rules)
+      const rulesByType = rules && rules.length > 0 && sortRulesByType(rules)
       return (
         <Page>
           <PageHeader type="tertiary">

@@ -11,6 +11,8 @@ import styles from './rules.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {throwNotification, toggleDrawer} from 'state/actions/actions'
+import {pick} from 'lodash'
+import {isDuplicateRuleset} from 'components/rulesets/helpers'
 
 const typeOptions = [
   {value: 'setup', text: 'Setup'},
@@ -19,6 +21,77 @@ const typeOptions = [
   {value: 'misc', text: 'Miscellaneous'}
 ]
 
+const createRuleMutation = gql`
+  mutation createRule($rule: RuleInput!){
+    createRule(rule: $rule){
+      id
+      description
+      type
+    }
+  }
+`
+
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    currentGame: state.game.currentGame
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    throwNotification: (notification) => {
+      dispatch(throwNotification(notification))
+    },
+    closeDrawer: () => {
+      dispatch(toggleDrawer(false))
+    }
+  }
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
+@graphql(createRuleMutation, {
+  props ({ownProps, mutate}) {
+    return {
+      createNewRule (rule) {
+        return mutate({
+          variables: {
+            rule: rule
+          },
+          updateQueries: {
+            getRuleset: (previousResult, { mutationResult }) => {
+              const newRule = mutationResult.data.createRule
+              let newResult
+              if (isDuplicateRuleset(newRule, previousResult.ruleset.rules)) {
+                return previousResult
+              } else {
+                if (previousResult.ruleset.rules) {
+                  newResult = update(previousResult, {
+                    ruleset: {
+                      rules: {
+                        $unshift: [newRule]
+                      }
+                    }
+                  })
+                } else {
+                  newResult = update(previousResult, {
+                    ruleset: {
+                      rules: {
+                        $set: [newRule]
+                      }
+                    }
+                  })
+                }
+                return newResult
+              }
+            }
+          }
+        })
+      }
+    }
+  }
+})
+@CSSModules(styles)
 class NewRuleForm extends React.Component {
 
   constructor () {
@@ -28,11 +101,12 @@ class NewRuleForm extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault()
+    const author = pick(this.props.user, ['id', 'username'])
     const rule = {
       type: this._ruleType.state.value,
       description: this._ruleDescription.state.value,
       ruleset: this.props.rulesetid,
-      author: this.props.user
+      author: author
     }
 
     this.props.createNewRule(rule).then(res => {
@@ -71,57 +145,4 @@ class NewRuleForm extends React.Component {
   }
 }
 
-const createRuleMutation = gql`
-  mutation createRule($rule: RuleInput!){
-    createRule(rule: $rule){
-      id
-      description
-      type
-    }
-  }
-`
-const NewRuleFormWithMutation = graphql(createRuleMutation, {
-  props ({ownProps, mutate}) {
-    return {
-      createNewRule (rule) {
-        return mutate({
-          variables: {
-            rule: rule
-          },
-          updateQueries: {
-            getRuleset: (prev, { mutationResult }) => {
-              const newRule = mutationResult.data.createRule
-              return update(prev, {
-                ruleset: {
-                  rules: {
-                    $unshift: [newRule]
-                  }
-                }
-              })
-            }
-          }
-        })
-      }
-    }
-  }
-})(NewRuleForm)
-
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    currentGame: state.game.currentGame
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    throwNotification: (notification) => {
-      dispatch(throwNotification(notification))
-    },
-    closeDrawer: () => {
-      dispatch(toggleDrawer(false))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(withRouter(NewRuleFormWithMutation), styles))
+export default withRouter(NewRuleForm)
