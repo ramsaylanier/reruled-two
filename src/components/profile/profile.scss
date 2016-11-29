@@ -1,12 +1,25 @@
 .avatar{
   background-image: url('/assets/imgs/default-avatar.png');
-  height: 50px;
-  width: 50px;
   background-color: red;
   background-size: cover;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1em;
   border-radius: 50%;
   border: 1px solid lightgray;
+
+  &.default{
+    height: 50px;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50px;
+  }
+
+  &.small{
+    height: 30px;
+    width: 30px;
+  }
+
+  &.large{
+    height: 75px;
+    width: 75px;
+  }
 }

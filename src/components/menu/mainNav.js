@@ -33,7 +33,6 @@ class MainNav extends React.Component {
     return (
       <Page>
         <PageHeader type="light">
-            <MenuItem><Link to={`user/${username}`} styleName="link">{username}</Link></MenuItem>
             <MenuItem><Link to="/logout" styleName="link">Logout</Link></MenuItem>
         </PageHeader>
         <PageContent>

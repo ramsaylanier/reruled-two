@@ -4,8 +4,8 @@ import styles from './profile.scss'
 
 const UserAvatar = (props) => {
   return (
-    <div styleName="avatar"></div>
+    <div styleName={`avatar ${props.type || 'default'}`}></div>
   )
 }
 
-export default CSSModules(UserAvatar, styles)
+export default CSSModules(UserAvatar, styles, {allowMultiple: true})

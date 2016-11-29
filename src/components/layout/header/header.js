@@ -1,10 +1,11 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router'
 import MenuToggle from 'components/menu/menuToggle'
 import CSSModules from 'react-css-modules'
 import styles from './header.scss'
 import BackIcon from 'components/icons/backIcon'
-import UserAvatar from 'components/profile/UserAvatar'
+import UserAvatar from 'components/profile/userAvatar'
 import {TOGGLE_DRAWER, CLOSE_NAV} from 'state/actions/actions'
 
 const Header = (props) => {
@@ -24,7 +25,7 @@ const Header = (props) => {
         <BackIcon/>
       </button>
 
-      {props.user && <UserAvatar/>}
+      {props.user.id && <Link to={`/user/${props.user.username}`}><UserAvatar type="small"/></Link>}
 
       <MenuToggle/>
     </header>
@@ -38,6 +39,7 @@ Header.propTypes = {
 
 function mapStateToProps (state) {
   return {
+    user: state.user,
     drawerOpen: state.ui.drawerOpen,
     navOpen: state.ui.navOpen
   }
