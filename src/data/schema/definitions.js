@@ -68,6 +68,7 @@ export default `
 
   type Subscription {
     rulesetAdded(game: String!): Ruleset
+    ruleAdded(rulesetId: String!): Rule
   }
 
   schema {
