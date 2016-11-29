@@ -4,6 +4,7 @@ import MenuToggle from '../menu/menuToggle'
 import CSSModules from 'react-css-modules'
 import styles from './header.scss'
 import BackIcon from 'components/icons/backIcon'
+import UserAvatar from 'components/profile/UserAvatar'
 import {TOGGLE_DRAWER, CLOSE_NAV} from 'state/actions/actions'
 
 const Header = (props) => {
@@ -22,6 +23,9 @@ const Header = (props) => {
       <button onClick={handleBackButtonClick} styleName="button">
         <BackIcon/>
       </button>
+
+      {props.user && <UserAvatar/>}
+
       <MenuToggle/>
     </header>
   )
