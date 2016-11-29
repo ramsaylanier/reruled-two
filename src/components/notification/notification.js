@@ -4,6 +4,14 @@ import CSSModules from 'react-css-modules'
 import styles from './Notification.scss'
 import TweenMax from 'gsap'
 
+function mapStateToProps (state) {
+  return {
+    notification: state.ui.notification
+  }
+}
+
+@connect(mapStateToProps)
+@CSSModules(styles, {allowMultiple: true})
 class Notification extends React.Component {
 
   constructor () {
@@ -57,10 +65,4 @@ class Notification extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    notification: state.ui.notification
-  }
-}
-
-export default connect(mapStateToProps)(CSSModules(Notification, styles, {allowMultiple: true}))
+export default Notification

@@ -8,6 +8,15 @@ import MenuItem from './menuItem'
 import CSSModules from 'react-css-modules'
 import styles from './menus.scss'
 
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    ui: state.ui
+  }
+}
+
+@connect(mapStateToProps)
+@CSSModules(styles, {allowMultiple: true})
 class MainNav extends React.Component {
   componentWillReceiveProps (nextProps) {
     let dX = '0%'
@@ -16,7 +25,7 @@ class MainNav extends React.Component {
     }
     TweenMax.to(this._nav, 0.75, {
       x: dX,
-      ease: Power4.easeOut
+      ease: Power4.easeOut // eslint-disable-line no-undef
     })
   }
 
@@ -63,11 +72,4 @@ class MainNav extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    ui: state.ui
-  }
-}
-
-export default connect(mapStateToProps)(CSSModules(MainNav, styles, {allowMultiple: true}))
+export default MainNav
