@@ -3,6 +3,7 @@ export default `
     id: String
     username: String
     email: String
+    history: [Game]
   }
 
   type Game {
@@ -65,8 +66,13 @@ export default `
     createRule(rule: RuleInput!): Rule
   }
 
+  type Subscription {
+    rulesetAdded(game: String!): Ruleset
+  }
+
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `

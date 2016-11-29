@@ -9,7 +9,72 @@ import styles from './rulesets.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {throwNotification, toggleDrawer} from 'state/actions/actions'
+import {isDuplicateRuleset} from './helpers'
 
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    currentGame: state.game.currentGame
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    closeDrawer: () => {
+      dispatch(toggleDrawer(false))
+    },
+    throwNotification: (notification) => {
+      dispatch(throwNotification(notification))
+    }
+  }
+}
+
+const createRulesetMutation = gql`
+  mutation createRuleset($ruleset: RulesetInput!){
+    createRuleset(ruleset: $ruleset){
+      id
+      name
+    }
+  }
+`
+
+@connect(mapStateToProps, mapDispatchToProps)
+@graphql(createRulesetMutation, {
+  props ({ownProps, mutate}) {
+    return {
+      createNewRuleset (ruleset) {
+        return mutate({
+          variables: {
+            ruleset: ruleset
+          },
+          updateQueries: {
+            getRulesetsForGame: (prev, { mutationResult }) => {
+              const newRuleset = mutationResult.data.createRuleset
+              if (isDuplicateRuleset(newRuleset, prev.rulesets)) {
+                return prev
+              } else {
+                if (prev.rulesets) {
+                  return update(prev, {
+                    rulesets: {
+                      $unshift: [newRuleset]
+                    }
+                  })
+                } else {
+                  return update(prev, {
+                    rulesets: {
+                      $set: [newRuleset]
+                    }
+                  })
+                }
+              }
+            }
+          }
+        })
+      }
+    }
+  }
+})
+@CSSModules(styles)
 class NewRulesetForm extends React.Component {
 
   constructor () {
@@ -27,8 +92,12 @@ class NewRulesetForm extends React.Component {
         messageType: 'error'
       })
     } else {
+      const author = {
+        id: this.props.user.id,
+        username: this.props.user.username
+      }
       const ruleset = {
-        author: this.props.user,
+        author: author,
         name: this._rulesetName.state.value,
         game: this.props.currentGame
       }
@@ -54,7 +123,7 @@ class NewRulesetForm extends React.Component {
       <Form action={this.handleSubmit}>
         <FormControl>
           <Label type="block">Ruleset Name</Label>
-          <Input name="ruleset name" value="test" placeholder="ruleset name" ref={c => { this._rulesetName = c }}/>
+          <Input name="ruleset name" placeholder="ruleset name" ref={c => { this._rulesetName = c }}/>
         </FormControl>
 
         <FormControl>
@@ -65,62 +134,4 @@ class NewRulesetForm extends React.Component {
   }
 }
 
-const createRulesetMutation = gql`
-  mutation createRuleset($ruleset: RulesetInput!){
-    createRuleset(ruleset: $ruleset){
-      id
-      name
-    }
-  }
-`
-const NewRulesetFormWithMutation = graphql(createRulesetMutation, {
-  props ({ownProps, mutate}) {
-    return {
-      createNewRuleset (ruleset) {
-        return mutate({
-          variables: {
-            ruleset: ruleset
-          },
-          updateQueries: {
-            getRulesetsForGame: (prev, { mutationResult }) => {
-              const newRuleset = mutationResult.data.createRuleset
-              if (prev.rulesets) {
-                return update(prev, {
-                  rulesets: {
-                    $unshift: [newRuleset]
-                  }
-                })
-              } else {
-                return update(prev, {
-                  rulesets: {
-                    $set: [newRuleset]
-                  }
-                })
-              }
-            }
-          }
-        })
-      }
-    }
-  }
-})(NewRulesetForm)
-
-function mapStateToProps (state) {
-  return {
-    user: state.user,
-    currentGame: state.game.currentGame
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    closeDrawer: () => {
-      dispatch(toggleDrawer(false))
-    },
-    throwNotification: (notification) => {
-      dispatch(throwNotification(notification))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(withRouter(NewRulesetFormWithMutation), styles))
+export default withRouter(NewRulesetForm)

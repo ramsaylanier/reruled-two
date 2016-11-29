@@ -2,6 +2,7 @@ import React from 'react'
 import CSSModules from 'react-css-modules'
 import styles from './input.scss'
 
+@CSSModules(styles, {allowMultiple: true})
 class Select extends React.Component {
   constructor (props) {
     super(props)
@@ -16,6 +17,7 @@ class Select extends React.Component {
   }
 
   render () {
+    // eslint-disable-next-line no-unused-vars
     const {options, styles, ...rest} = this.props
     return (
       <select
@@ -25,11 +27,11 @@ class Select extends React.Component {
         {...rest}
       >
         {options.map(option => {
-          return <option value={option.value}>{option.text}</option>
+          return <option value={option.value} key={option.value}>{option.text}</option>
         })}
       </select>
     )
   }
 }
 
-export default CSSModules(Select, styles, {allowMultiple: true})
+export default Select
