@@ -65,7 +65,6 @@ const rulesetQuery = gql`
   })
 })
 @CSSModules(styles)
-
 class Ruleset extends React.Component {
 
   constructor () {
@@ -110,7 +109,6 @@ class Ruleset extends React.Component {
   }
 
   render () {
-    console.log('ruleset: ', this.props)
     const {user, ruleset, loading} = this.props
     const sortRulesByType = (rules) => {
       return groupBy(rules, (rule) => {
