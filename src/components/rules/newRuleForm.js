@@ -12,6 +12,7 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {throwNotification, toggleDrawer} from 'state/actions/actions'
 import {pick} from 'lodash'
+import {isDuplicateRuleset} from 'components/rulesets/helpers'
 
 const typeOptions = [
   {value: 'setup', text: 'Setup'},
@@ -58,15 +59,31 @@ function mapDispatchToProps (dispatch) {
             rule: rule
           },
           updateQueries: {
-            getRuleset: (prev, { mutationResult }) => {
+            getRuleset: (previousResult, { mutationResult }) => {
               const newRule = mutationResult.data.createRule
-              return update(prev, {
-                ruleset: {
-                  rules: {
-                    $unshift: [newRule]
-                  }
+              let newResult
+              if (isDuplicateRuleset(newRule, previousResult.ruleset.rules)) {
+                return previousResult
+              } else {
+                if (previousResult.ruleset.rules) {
+                  newResult = update(previousResult, {
+                    ruleset: {
+                      rules: {
+                        $unshift: [newRule]
+                      }
+                    }
+                  })
+                } else {
+                  newResult = update(previousResult, {
+                    ruleset: {
+                      rules: {
+                        $set: [newRule]
+                      }
+                    }
+                  })
                 }
-              })
+                return newResult
+              }
             }
           }
         })

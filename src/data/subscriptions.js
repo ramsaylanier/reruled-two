@@ -7,11 +7,19 @@ const subscriptionManager = new SubscriptionManager({
   pubsub,
   setupFunctions: {
     rulesetAdded: (options, args) => {
-      console.log('args: ', args)
       return (
       {
         rulesetAdded: ruleset => {
           return ruleset.game.name === args.game
+        }
+      })
+    },
+    ruleAdded: (options, args) => {
+      return (
+      {
+        ruleAdded: rule => {
+          console.log(rule)
+          return rule.ruleset.id === args.rulesetId
         }
       })
     }
