@@ -2,12 +2,14 @@ import React from 'react'
 import CSSModules from 'react-css-modules'
 import {withRouter} from 'react-router'
 import Page from 'components/layout/pages/page'
+import animatePage from 'components/layout/pages/pageDecorators'
 import {Form, FormControl, Label} from 'components/form/form'
 import Input from 'components/form/input/input'
 import AUTH_API from 'auth/api'
 import {store} from 'apollo'
 import styles from 'components/layout/pages/page.scss'
 
+@animatePage()
 @CSSModules(styles)
 class Login extends React.Component {
 

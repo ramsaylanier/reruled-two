@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import CSSModules from 'react-css-modules'
 import {withRouter} from 'react-router'
 import Page from 'components/layout/pages/page'
+import animatePage from 'components/layout/pages/pageDecorators'
 import {Form, FormControl, Label} from 'components/form/form'
 import Input from 'components/form/input/input'
 import styles from 'components/layout/pages/page.scss'
@@ -11,6 +12,7 @@ import {graphql} from 'react-apollo'
 import {throwNotification} from 'state/actions/actions'
 import ReruledError from 'error/error'
 
+@animatePage()
 class Register extends React.Component {
 
   constructor () {
