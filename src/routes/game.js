@@ -2,8 +2,8 @@ import React from 'react'
 import {Page, PageHeader, PageContent} from 'components/layout/pages'
 import DrawerToggleButton from 'components/buttons/drawerToggleButton'
 import NewRulesetForm from 'components/rulesets/newRulesetForm'
-import {List, ListItem} from 'components/layout/list'
-import {Link} from 'react-router'
+import RulesetItem from 'components/rulesets/rulesetItem'
+import {List} from 'components/layout/list'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
@@ -42,6 +42,13 @@ const rulesetQuery = gql`
     rulesets(game: $game){
       id
       name
+      author{
+        id
+      }
+      rules{
+        id
+        type
+      }
     }
   }
 `
@@ -115,9 +122,7 @@ class Game extends React.Component {
             <List type="no-style">
               {rulesets.map(ruleset => {
                 return (
-                  <ListItem key={ruleset.id}>
-                    <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
-                  </ListItem>
+                  <RulesetItem ruleset={ruleset} />
                 )
               })}
             </List>
