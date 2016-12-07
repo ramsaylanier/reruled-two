@@ -9,7 +9,8 @@ import styles from './rulesets.scss'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {throwNotification, toggleDrawer} from 'state/actions/actions'
-import {isDuplicateRuleset} from './helpers'
+import {shapeRuleset} from './helpers'
+import {findIndex} from 'lodash'
 
 function mapStateToProps (state) {
   return {
@@ -30,10 +31,17 @@ function mapDispatchToProps (dispatch) {
 }
 
 const editRulesetMutation = gql`
-  mutation createRuleset($ruleset: RulesetInput!){
-    createRuleset(ruleset: $ruleset){
+  mutation updateRuleset($ruleset: RulesetInput!){
+    updateRuleset(ruleset: $ruleset){
       id
       name
+      author{
+        id
+      }
+      rules{
+        id
+        type
+      }
     }
   }
 `
@@ -42,31 +50,24 @@ const editRulesetMutation = gql`
 @graphql(editRulesetMutation, {
   props ({ownProps, mutate}) {
     return {
-      createNewRuleset (ruleset) {
+      updateRuleset (ruleset) {
         return mutate({
           variables: {
             ruleset: ruleset
           },
           updateQueries: {
             getRulesetsForGame: (prev, { mutationResult }) => {
-              const newRuleset = mutationResult.data.createRuleset
-              if (isDuplicateRuleset(newRuleset, prev.rulesets)) {
-                return prev
-              } else {
-                if (prev.rulesets) {
-                  return update(prev, {
-                    rulesets: {
-                      $unshift: [newRuleset]
-                    }
-                  })
-                } else {
-                  return update(prev, {
-                    rulesets: {
-                      $set: [newRuleset]
-                    }
-                  })
+              const updatedRuleset = mutationResult.data.updateRuleset
+              return update(prev, {
+                rulesets: {
+                  $apply: rulesets => {
+                    const index = findIndex(rulesets, ruleset => {
+                      return ruleset.id === updatedRuleset.id
+                    })
+                    rulesets[index] = updatedRuleset
+                  }
                 }
-              }
+              })
             }
           }
         })
@@ -92,21 +93,15 @@ class EditRulesetForm extends React.Component {
         messageType: 'error'
       })
     } else {
-      const author = {
-        id: this.props.user.id,
-        username: this.props.user.username
-      }
-      const ruleset = {
-        author: author,
-        name: this._rulesetName.state.value,
-        game: this.props.currentGame
-      }
+      const ruleset = shapeRuleset(this.props.ruleset)
+      ruleset.name = this._rulesetName.state.value
+      ruleset.game = this.props.currentGame
 
-      this.props.createNewRuleset(ruleset).then(res => {
+      this.props.updateRuleset(ruleset).then(res => {
         this._rulesetName.value = ''
         this.props.closeDrawer()
         this.props.throwNotification({
-          message: 'Ruleset created!',
+          message: 'Ruleset updated!',
           messageType: 'success'
         })
       }).catch(err => {
@@ -123,11 +118,11 @@ class EditRulesetForm extends React.Component {
       <Form action={this.handleSubmit}>
         <FormControl>
           <Label type="block">Ruleset Name</Label>
-          <Input name="ruleset name" value={this.props.ruleset.name} ref={c => { this._rulesetName = c }}/>
+          <Input name="ruleset name" startValue={this.props.ruleset.name} ref={c => { this._rulesetName = c }}/>
         </FormControl>
 
         <FormControl>
-          <Input type="submit" value="Create"/>
+          <Input type="submit" value="Save"/>
         </FormControl>
       </Form>
     )

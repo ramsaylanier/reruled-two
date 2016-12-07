@@ -36,38 +36,41 @@ export default `
   }
 
   input UserInput {
-    email: String,
-    password: String,
-    confirmPassword: String,
+    email: String
+    password: String
+    confirmPassword: String
     username: String
   }
 
   input AuthorInput {
-    id: String!,
-    username: String!
+    id: String!
+    username: String
   }
 
   input RulesetInput {
-    name: String!,
-    game: String!,
+    id: String
+    name: String!
+    game: String!
     author: AuthorInput!
   }
 
   input RuleInput {
-    type: String!,
-    description: String!,
-    ruleset: String!,
+    type: String!
+    description: String!
+    ruleset: String!
     author: AuthorInput!
   }
 
   type Mutation {
     createUser(user: UserInput!): User
     createRuleset(ruleset: RulesetInput!): Ruleset
+    updateRuleset(ruleset: RulesetInput!): Ruleset
     createRule(rule: RuleInput!): Rule
   }
 
   type Subscription {
     rulesetAdded(game: String!): Ruleset
+    rulesetUpdated(rulesetId: String!): Ruleset
     ruleAdded(rulesetId: String!): Rule
   }
 

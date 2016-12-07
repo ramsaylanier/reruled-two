@@ -7,7 +7,7 @@ class Input extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: ''
+      value: this.props.startValue || ''
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -18,7 +18,7 @@ class Input extends React.Component {
 
   render () {
     // eslint-disable-next-line no-unused-vars
-    const {styles, type = 'text', ...rest} = this.props
+    const {styles, startValue, type = 'text', ...rest} = this.props
     return (
       <input
         styleName={`base ${type}`}

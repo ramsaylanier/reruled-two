@@ -33,6 +33,13 @@ const rulesetSubscription = gql`
     rulesetAdded(game: $game){
       id
       name
+      author{
+        id
+      }
+      rules{
+        id
+        type
+      }
     }
   }
 `
@@ -122,7 +129,7 @@ class Game extends React.Component {
             <List type="no-style">
               {rulesets.map(ruleset => {
                 return (
-                  <RulesetItem ruleset={ruleset} />
+                  <RulesetItem key={ruleset.id} ruleset={ruleset} />
                 )
               })}
             </List>

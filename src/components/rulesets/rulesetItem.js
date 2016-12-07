@@ -18,7 +18,7 @@ const RulesetItem = (props) => {
   }
 
   const renderEditIcon = (ruleset) => {
-    if (props.user.id === ruleset.author.id) {
+    if (ruleset.author && props.user.id === ruleset.author.id) {
       return (
         <div styleName="edit" onClick={handleEditIconClick}>
           <DrawerToggleButton
@@ -37,7 +37,9 @@ const RulesetItem = (props) => {
         <Link to={`/ruleset/${ruleset.id}`}>{ruleset.name}</Link>
         {renderEditIcon(ruleset)}
       </div>
-      <RulesetSummary rules={rules}/>
+      {rules &&
+        <RulesetSummary rules={rules}/>
+      }
     </ListItem>
   )
 }

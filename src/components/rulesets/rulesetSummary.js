@@ -22,7 +22,7 @@ const RulesetSummary = (props) => {
 }
 
 RulesetSummary.propTypes = {
-  rules: PropTypes.array.isRequired
+  rules: PropTypes.array
 }
 
 export default CSSModules(RulesetSummary, styles, {allowMultiple: true})

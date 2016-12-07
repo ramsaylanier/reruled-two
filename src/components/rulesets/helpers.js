@@ -17,3 +17,10 @@ export function sortRulesByType (rules) {
   })
   return groupedRules
 }
+
+export function shapeRuleset (ruleset) {
+  const {__typename: rulesetType, rules, ...rulesetInfo} = ruleset // eslint-disable-line
+  const {__typename: authorType, ...authorInfo} = ruleset.author // eslint-disable-line
+  rulesetInfo.author = authorInfo
+  return {...rulesetInfo}
+}
