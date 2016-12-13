@@ -70,7 +70,7 @@ export default `
 
   type Subscription {
     rulesetAdded(game: String!): Ruleset
-    rulesetUpdated(rulesetId: String!): Ruleset
+    rulesetUpdated: Ruleset
     ruleAdded(rulesetId: String!): Rule
   }
 

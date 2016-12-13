@@ -18,7 +18,7 @@ const subscriptionManager = new SubscriptionManager({
       return (
       {
         rulesetUpdated: ruleset => {
-          return ruleset.game.name === args.game
+          return ruleset
         }
       })
     },

@@ -8,10 +8,10 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import {addGameToHistory} from 'state/actions/actions'
-import update from 'react-addons-update'
-import {isDuplicateRuleset} from 'components/rulesets/helpers'
 import CSSModules from 'react-css-modules'
 import styles from 'components/games/game.scss'
+import {rulesetAddedSubscriptionOptions} from 'data/subscriptions/rulesets/add'
+import {rulesetUpdatedSubscriptionOptions} from 'data/subscriptions/rulesets/update'
 
 function mapStateToProps (state) {
   return {
@@ -27,22 +27,6 @@ function mapDisatchToProps (dispatch) {
     }
   }
 }
-
-const rulesetSubscription = gql`
-  subscription onRulesetsAdded($game: String!){
-    rulesetAdded(game: $game){
-      id
-      name
-      author{
-        id
-      }
-      rules{
-        id
-        type
-      }
-    }
-  }
-`
 
 const rulesetQuery = gql`
   query getRulesetsForGame($game: String!){
@@ -78,38 +62,21 @@ class Game extends React.Component {
 
   constructor (props) {
     super(props)
-    this.subscription = null
+    this.rulesetAddedSubscription = null
+    this.rulesetUpdatedSubscription = null
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!this.subscription && !nextProps.loading) {
-      this.subscription = this.props.subscribeToMore({
-        document: rulesetSubscription,
-        variables: { game: nextProps.params.title },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          const newRuleset = subscriptionData.data.rulesetAdded
-          let newResult
-          if (isDuplicateRuleset(newRuleset, previousResult.rulesets)) {
-            return previousResult
-          } else {
-            if (previousResult.rulesets) {
-              newResult = update(previousResult, {
-                rulesets: {
-                  $unshift: [newRuleset]
-                }
-              })
-            } else {
-              newResult = update(previousResult, {
-                rulesets: {
-                  $set: [newRuleset]
-                }
-              })
-            }
-            return newResult
-          }
-        },
-        onError: (err) => console.log(err)
-      })
+    if (!this.rulesetAddedSubscription && !nextProps.loading) {
+      this.rulesetAddedSubscription = this.props.subscribeToMore(
+        rulesetAddedSubscriptionOptions(nextProps)
+      )
+    }
+
+    if (!this.rulesetUpdatedSubscription && !nextProps.loading) {
+      this.rulesetUpdatedSubscription = this.props.subscribeToMore(
+        rulesetUpdatedSubscriptionOptions(nextProps)
+      )
     }
   }
 
