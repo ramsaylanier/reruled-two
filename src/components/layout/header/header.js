@@ -40,6 +40,11 @@ class Header extends React.Component {
     navOpen: PropTypes.bool.isRequired
   }
 
+  constructor () {
+    super()
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
+  }
+
   handleBackButtonClick (e) {
     e.preventDefault()
     if (this.props.drawerOpen || this.props.navOpen) {
@@ -65,7 +70,7 @@ class Header extends React.Component {
       y: -40
     }, {
       y: 0,
-      ease: Power4.easeInOut // eslint-disable-line 
+      ease: Power4.easeInOut // eslint-disable-line
     })
   }
 

@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 .title{
   margin: .25rem 0;
   font-size: 1.5rem;
@@ -17,4 +19,64 @@
   background-color: white;
   padding: .25rem;
   border-radius: 3px;
+}
+
+.summary{
+  display: flex;
+  margin-top: 1rem;
+  border-top: 1px solid darken(white, 20%);
+  padding-top: 1rem;
+
+  .item{
+    position: relative;
+    display: flex;
+    align-items: center;
+    &:not(:first-of-type){
+      margin-left: .6rem;
+    }
+  }
+
+  .type{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .6rem;
+    text-transform: uppercase;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    margin-right: .25rem;
+
+    &.endgame{
+      background-color: $primary;
+    }
+
+    &.play{
+      background-color: $secondary;
+    }
+
+    &.misc{
+      background-color: $tertiary;
+    }
+
+    &.setup{
+      background-color: $primary;
+    }
+  }
+
+  .count{
+    font-size: .8rem;
+  }
+}
+
+.item-header{
+  display: flex;
+}
+
+.edit{
+  margin-left: .5rem;
+  height: 22px;
+  width: 22px;
 }

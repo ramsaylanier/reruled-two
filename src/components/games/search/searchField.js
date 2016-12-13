@@ -18,7 +18,7 @@ const GameQuery = gql`
   options: (props) => {
     return ({
       variables: {
-        title: props.title
+        title: props.title || ''
       }
     })
   }

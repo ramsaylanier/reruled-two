@@ -9,10 +9,10 @@ import CSSModules from 'react-css-modules'
 import styles from 'components/rulesets/rulesets.scss'
 import gql from 'graphql-tag'
 import update from 'react-addons-update'
-import {isDuplicateRuleset} from 'components/rulesets/helpers'
+import {isDuplicateRuleset, sortRulesByType} from 'components/rulesets/helpers'
 import {graphql} from 'react-apollo'
 import {connect} from 'react-redux'
-import {groupBy, map} from 'lodash'
+import {map} from 'lodash'
 
 function mapStateToProps (state) {
   return {
@@ -65,7 +65,6 @@ const rulesetQuery = gql`
   })
 })
 @CSSModules(styles)
-
 class Ruleset extends React.Component {
 
   constructor () {
@@ -110,13 +109,7 @@ class Ruleset extends React.Component {
   }
 
   render () {
-    console.log('ruleset: ', this.props)
     const {user, ruleset, loading} = this.props
-    const sortRulesByType = (rules) => {
-      return groupBy(rules, (rule) => {
-        return rule.type
-      })
-    }
 
     if (loading) {
       return (

@@ -8,6 +8,18 @@ db.createRuleset = function (ruleset) {
   })
 }
 
+db.updateRuleset = function (ruleset) {
+  const {id, ...rest} = ruleset.ruleset
+  return this.client.update({
+    index: 'reruled_rulesets',
+    type: 'ruleset',
+    id: id,
+    body: {
+      doc: {...rest}
+    }
+  })
+}
+
 db.getRuleset = function (id) {
   return this.client.get({
     index: 'reruled_rulesets',

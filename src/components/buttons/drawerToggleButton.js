@@ -43,10 +43,10 @@ class drawerToggleButton extends React.Component {
     return (
       <button
         ref={c => { this._toggle = c }}
-        styleName='toggle'
+        styleName={`${this.props.type || 'fixed'}`}
         onClick={ () => toggleDrawer(drawerContent, drawerOpen)}
       >
-        +
+        {this.props.icon || '+'}
       </button>
     )
   }

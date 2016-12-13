@@ -14,11 +14,18 @@ const subscriptionManager = new SubscriptionManager({
         }
       })
     },
+    rulesetUpdated: (options, args) => {
+      return (
+      {
+        rulesetUpdated: ruleset => {
+          return ruleset
+        }
+      })
+    },
     ruleAdded: (options, args) => {
       return (
       {
         ruleAdded: rule => {
-          console.log(rule)
           return rule.ruleset.id === args.rulesetId
         }
       })
