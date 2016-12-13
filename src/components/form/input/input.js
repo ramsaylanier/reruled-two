@@ -16,6 +16,14 @@ class Input extends React.Component {
     this.setState({value: e.target.value})
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.startValue !== this.state.value) {
+      this.setState({
+        value: nextProps.startValue
+      })
+    }
+  }
+
   render () {
     // eslint-disable-next-line no-unused-vars
     const {styles, startValue, type = 'text', ...rest} = this.props

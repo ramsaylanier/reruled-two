@@ -13,14 +13,10 @@ const RulesetItem = (props) => {
   const {ruleset} = props
   const {rules} = ruleset
 
-  const handleEditIconClick = (e) => {
-    console.log(e)
-  }
-
   const renderEditIcon = (ruleset) => {
     if (ruleset.author && props.user.id === ruleset.author.id) {
       return (
-        <div styleName="edit" onClick={handleEditIconClick}>
+        <div styleName="edit">
           <DrawerToggleButton
             icon={<EditIcon/>}
             drawerContent={<EditRulesetForm ruleset={ruleset}/>}
